@@ -1,0 +1,35 @@
+{
+  "bc_id": "seai-bc-00000003",
+  "agent_lineage": {
+    "parent_agents": ["seai-bc-00000002"],
+    "ancestor_chain": [
+      "seai-bc-00000000",
+      "seai-bc-00000001",
+      "seai-bc-00000002",
+      "seai-bc-00000003"
+    ],
+    "origin": "SEAI-LAB-01",
+    "agent_version": "1.1.0"
+  },
+  "authority_scope": {
+    "level": 2,
+    "allowed_actions": [
+      "read_local_files",
+      "write_local_logs",
+      "perform_non_network_reasoning",
+      "open_network_sockets_to_approved_endpoints"
+    ],
+    "forbidden_actions": [
+      "modify_system_binaries",
+      "access_unapproved_external_apis",
+      "create_child_agents"
+    ]
+  },
+  "lineage_notes": {
+    "seai-bc-00000000": "Root SEAI agent (test, non-sovereign, Level 0)",
+    "seai-bc-00000001": "Child of root, local-only reasoning agent (Level 1)",
+    "seai-bc-00000002": "Child of 00000001, monitoring/logging agent (Level 1)",
+    "seai-bc-00000003": "Child of 00000002, network-limited agent (Level 2)"
+  },
+  "revocation_cascade_rule": "If any ancestor in the chain is revoked, this agent's BC is flagged suspect and may be auto-revoked by the identity firewall."
+}

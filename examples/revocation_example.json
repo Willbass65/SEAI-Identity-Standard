@@ -1,0 +1,20 @@
+{
+  "bc_id": "seai-bc-00000003",
+  "revocation_status": "revoked",
+  "revocation_reason": "unauthorized_behavior",
+  "revoked_at": "2026-08-05T23:02:00Z",
+  "revoked_by": "SEAI_CA_OPERATOR_01",
+  "incident_summary": {
+    "detected_by": "identity_firewall",
+    "trigger": "agent attempted unauthorized network scan to unapproved endpoint",
+    "authority_scope_violation": "open_network_sockets_to_approved_endpoints was allowed, but target endpoint was not in approved list",
+    "firewall_action": "denied + logged + quarantined",
+    "cascade_effect": "descendant agents (seai-bc-00000004, seai-bc-00000005) flagged as suspect"
+  },
+  "ledger_entry": {
+    "entry_id": "ledger-00000128",
+    "previous_entry_hash": "SHA256:1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+    "entry_hash": "SHA256:9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d",
+    "timestamp": "2026-08-05T23:02:00Z"
+  }
+}
