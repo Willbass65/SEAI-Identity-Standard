@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Willbass65/SEAI-Identity-Standard/schemas/v1/attestation.json",
+  "title": "SEAI-P-001 Hardware Attestation Payload",
+  "description": "Schema for hardware-rooted identity and remote attestation payloads in SEAI agents.",
+  "type": "object",
+  "required": [
+    "seai_version",
+    "proposal_ref",
+    "agent_id",
+    "timestamp_utc",
+    "hardware_provider",
+    "attestation_quote",
+    "public_key"
+  ],
+  "properties": {
+    "seai_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "proposal_ref": {
+      "type": "string",
+      "const": "SEAI-P-001"
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Unique identifier for the AI agent. Must match the agent_id in the birth certificate.",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "hardware_provider": {
+      "type": "string",
+      "enum": ["TPM2.0", "AWS_Nitro", "Apple_Secure_Enclave", "HSM_Generic"]
+    },
+    "attestation_quote": {
+      "type": "object",
+      "required": ["quote_data", "signature"],
+      "properties": {
+        "quote_data": {
+          "type": "string",
+          "contentEncoding": "base64",
+          "description": "Base64-encoded attestation data from the hardware."
+        },
+        "signature": {
+          "type": "string",
+          "contentEncoding": "base64",
+          "description": "Base64-encoded signature of the quote_data, signed by the hardware-bound private key."
+        },
+        "pcr_indices": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 23 },
+          "uniqueItems": true,
+          "description": "TPM Platform Configuration Register indices (TPM-specific, optional for other providers)."
+        },
+        "pcr_values": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          },
+          "description": "TPM PCR values as hex strings (TPM-specific, optional for other providers)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "public_key": {
+      "type": "object",
+      "required": ["kty", "crv", "x"],
+      "properties": {
+        "kty": { "type": "string", "enum": ["OKP", "EC"] },
+        "crv": { "type": "string", "enum": ["Ed25519", "P-256", "secp256k1"] },
+        "x": { "type": "string", "contentEncoding": "base64" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
