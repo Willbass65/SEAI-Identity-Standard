@@ -51,11 +51,7 @@ All contributions must preserve:
 
 ## Code of Conduct
 
-- Be respectful and constructive
-- Focus on the technical merit of proposals
-- No marketing or product promotion
-- No proprietary lock-in proposals
-- Credit original authors when building on their work
+This project follows the [SEAI Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to **conduct@alboe.local**.
 
 ---
 
