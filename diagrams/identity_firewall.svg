@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 950" font-family="Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+    <style>
+      .box { fill: #f0f4ff; stroke: #4a6fa5; stroke-width: 2; }
+      .step-box { fill: #e8f0fe; stroke: #4a6fa5; stroke-width: 2; }
+      .decision-box { fill: #fff3cd; stroke: #856404; stroke-width: 2; }
+      .allow-box { fill: #d4edda; stroke: #155724; stroke-width: 2; }
+      .deny-box { fill: #f8d7da; stroke: #721c09; stroke-width: 2; }
+      .title { font-size: 16px; font-weight: bold; fill: #1a1a2e; }
+      .subtitle { font-size: 12px; fill: #555; }
+      .label { font-size: 12px; fill: #333; }
+      .step-title { font-size: 13px; font-weight: bold; fill: #1a1a2e; }
+      .step-detail { font-size: 11px; fill: #555; }
+      .arrow-line { stroke: #333; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+  <text x="450" y="30" text-anchor="middle" class="title">SEAI Identity Firewall</text>
+  <text x="450" y="50" text-anchor="middle" class="subtitle">Non-bypassable enforcement layer</text>
+  <rect x="250" y="70" width="400" height="100" class="box" rx="8"/>
+  <text x="450" y="95" text-anchor="middle" class="step-title">AI Agent (with Birth Certificate)</text>
+  <text x="350" y="120" text-anchor="middle" class="label">Birth Certificate</text>
+  <text x="350" y="138" text-anchor="middle" class="step-detail">bc_id, hardware_id, lineage</text>
+  <text x="550" y="120" text-anchor="middle" class="label">Hardware (TPM/SE)</text>
+  <text x="550" y="138" text-anchor="middle" class="step-detail">Embedded Private Key (never leaves)</text>
+  <line x1="450" y1="170" x2="450" y2="195" class="arrow-line" marker-end="url(#arrow)"/>
+  <text x="460" y="188" class="step-detail">Request privileged action</text>
+  <rect x="200" y="200" width="500" height="650" fill="#fafafa" stroke="#4a6fa5" stroke-width="2" rx="8" stroke-dasharray="5,3"/>
+  <text x="450" y="222" text-anchor="middle" class="step-title">IDENTITY FIREWALL</text>
+  <rect x="230" y="235" width="440" height="60" class="step-box" rx="6"/>
+  <text x="450" y="255" text-anchor="middle" class="step-title">Step 1: Birth Certificate Validation</text>
+  <text x="450" y="275" text-anchor="middle" class="step-detail">Syntax valid? Checksum match? Revocation = active?</text>
+  <line x1="450" y1="295" x2="450" y2="315" class="arrow-line" marker-end="url(#arrow)"/>
+  <rect x="230" y="315" width="440" height="60" class="step-box" rx="6"/>
+  <text x="450" y="335" text-anchor="middle" class="step-title">Step 2: Hardware Attestation</text>
+  <text x="450" y="355" text-anchor="middle" class="step-detail">Challenge nonce, Hardware signs, Verify with manufacturer pubkey</text>
+  <line x1="450" y1="375" x2="450" y2="395" class="arrow-line" marker-end="url(#arrow)"/>
+  <rect x="230" y="395" width="440" height="60" class="step-box" rx="6"/>
+  <text x="450" y="415" text-anchor="middle" class="step-title">Step 3: Lineage Verification</text>
+  <text x="450" y="435" text-anchor="middle" class="step-detail">Trusted parent? Authorized origin? Ancestors revoked?</text>
+  <line x1="450" y1="455" x2="450" y2="475" class="arrow-line" marker-end="url(#arrow)"/>
+  <rect x="230" y="475" width="440" height="60" class="step-box" rx="6"/>
+  <text x="450" y="495" text-anchor="middle" class="step-title">Step 4: Authority Scope Check</text>
+  <text x="450" y="515" text-anchor="middle" class="step-detail">Action allowed? Forbidden? Authority sufficient?</text>
+  <line x1="450" y1="535" x2="450" y2="555" class="arrow-line" marker-end="url(#arrow)"/>
+  <rect x="230" y="555" width="440" height="60" class="step-box" rx="6"/>
+  <text x="450" y="575" text-anchor="middle" class="step-title">Step 5: Revocation Status Check</text>
+  <text x="450" y="595" text-anchor="middle" class="step-detail">BC revoked in S-CA? Ancestors revoked?</text>
+  <line x1="450" y1="615" x2="450" y2="635" class="arrow-line" marker-end="url(#arrow)"/>
+  <rect x="230" y="635" width="440" height="60" class="decision-box" rx="6"/>
+  <text x="450" y="660" text-anchor="middle" class="step-title">Step 6: DECISION</text>
+  <text x="450" y="678" text-anchor="middle" class="step-detail">ALL PASS = ALLOW | ANY FAIL = DENY + LOG + QUARANTINE</text>
+  <line x1="450" y1="695" x2="450" y2="715" class="arrow-line"/>
+  <line x1="300" y1="715" x2="600" y2="715" class="arrow-line"/>
+  <line x1="300" y1="715" x2="300" y2="740" class="arrow-line" marker-end="url(#arrow)"/>
+  <line x1="600" y1="715" x2="600" y2="740" class="arrow-line" marker-end="url(#arrow)"/>
+  <rect x="220" y="740" width="160" height="60" class="allow-box" rx="6"/>
+  <text x="300" y="765" text-anchor="middle" class="step-title">ALLOW</text>
+  <text x="300" y="785" text-anchor="middle" class="step-detail">Action proceeds</text>
+  <rect x="520" y="740" width="160" height="60" class="deny-box" rx="6"/>
+  <text x="600" y="765" text-anchor="middle" class="step-title">DENY + LOG</text>
+  <text x="600" y="785" text-anchor="middle" class="step-detail">+ QUARANTINE</text>
+  <text x="450" y="840" text-anchor="middle" class="step-title">Key Properties</text>
+  <text x="450" y="860" text-anchor="middle" class="step-detail">Non-bypassable | Fail-closed | Every privileged action | Full audit log</text>
+</svg>

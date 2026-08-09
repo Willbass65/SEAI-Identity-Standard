@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650" font-family="Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+    <style>
+      .agent-box { fill: #e8f0fe; stroke: #4a6fa5; stroke-width: 2; }
+      .firewall-box { fill: #fff3cd; stroke: #856404; stroke-width: 2; }
+      .hw-box { fill: #d4edda; stroke: #155724; stroke-width: 2; }
+      .result-box { fill: #f0f4ff; stroke: #4a6fa5; stroke-width: 2; }
+      .title { font-size: 16px; font-weight: bold; fill: #1a1a2e; }
+      .box-title { font-size: 13px; font-weight: bold; fill: #1a1a2e; }
+      .step { font-size: 11px; fill: #333; }
+      .step-num { font-size: 11px; font-weight: bold; fill: #4a6fa5; }
+      .arrow-line { stroke: #333; stroke-width: 2; fill: none; }
+      .dashed { stroke: #999; stroke-width: 1; fill: none; stroke-dasharray: 4,3; }
+    </style>
+  </defs>
+  <text x="450" y="30" text-anchor="middle" class="title">SEAI Hardware Attestation — Challenge-Response</text>
+  <rect x="50" y="60" width="180" height="50" class="agent-box" rx="6"/>
+  <text x="140" y="90" text-anchor="middle" class="box-title">Agent</text>
+  <rect x="360" y="60" width="180" height="50" class="firewall-box" rx="6"/>
+  <text x="450" y="90" text-anchor="middle" class="box-title">Identity Firewall</text>
+  <rect x="670" y="60" width="180" height="50" class="hw-box" rx="6"/>
+  <text x="760" y="90" text-anchor="middle" class="box-title">Hardware (TPM)</text>
+  <line x1="140" y1="110" x2="140" y2="530" class="dashed"/>
+  <line x1="450" y1="110" x2="450" y2="530" class="dashed"/>
+  <line x1="760" y1="110" x2="760" y2="530" class="dashed"/>
+  <line x1="140" y1="140" x2="450" y2="140" class="arrow-line" marker-end="url(#arrow3)"/>
+  <text x="295" y="135" text-anchor="middle" class="step-num">1. Request action</text>
+  <text x="450" y="165" text-anchor="middle" class="step">2. Generate nonce (random 256 bits)</text>
+  <line x1="450" y1="180" x2="140" y2="180" class="arrow-line" marker-end="url(#arrow3)"/>
+  <text x="295" y="175" text-anchor="middle" class="step-num">3. Send nonce + hardware_id</text>
+  <line x1="140" y1="210" x2="760" y2="210" class="arrow-line" marker-end="url(#arrow3)"/>
+  <text x="450" y="205" text-anchor="middle" class="step-num">4. Forward nonce to hardware</text>
+  <text x="760" y="240" text-anchor="middle" class="step">5. Sign nonce with</text>
+  <text x="760" y="255" text-anchor="middle" class="step">embedded private key</text>
+  <text x="760" y="270" text-anchor="middle" class="step">(KEY NEVER LEAVES CHIP)</text>
+  <line x1="760" y1="285" x2="140" y2="285" class="arrow-line" marker-end="url(#arrow3)"/>
+  <text x="450" y="280" text-anchor="middle" class="step-num">6. Return signature</text>
+  <line x1="140" y1="315" x2="450" y2="315" class="arrow-line" marker-end="url(#arrow3)"/>
+  <text x="295" y="310" text-anchor="middle" class="step-num">7. Send signature</text>
+  <text x="450" y="345" text-anchor="middle" class="step">8. Verify signature using</text>
+  <text x="450" y="360" text-anchor="middle" class="step">manufacturer public key</text>
+  <text x="450" y="380" text-anchor="middle" class="step">9. Confirm hardware_id matches BC</text>
+  <line x1="450" y1="400" x2="140" y2="400" class="arrow-line" marker-end="url(#arrow3)"/>
+  <text x="295" y="395" text-anchor="middle" class="step-num">10. Decision</text>
+  <rect x="50" y="430" width="180" height="50" class="result-box" rx="6"/>
+  <text x="140" y="460" text-anchor="middle" class="box-title">ALLOW or DENY</text>
+  <rect x="360" y="430" width="180" height="50" class="result-box" rx="6"/>
+  <text x="450" y="460" text-anchor="middle" class="box-title">DENY + LOG + QUARANTINE</text>
+  <text x="450" y="510" text-anchor="middle" class="box-title">Security Properties</text>
+  <text x="450" y="530" text-anchor="middle" class="step">Unforgeable | Non-replayable | Offline-verifiable | Hardware-bound | Tamper-evident</text>
+  <text x="450" y="560" text-anchor="middle" class="step">Prevents: Stolen credentials, Copied BC, Cloned hardware, Replay attacks, MITM</text>
+</svg>
