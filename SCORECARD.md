@@ -163,5 +163,18 @@
 | 🛡 Security advisories | 0 |
 | 🕐 Last refreshed (UTC) | 2026-08-09 20:28 |
 
+### Governance Scorecard — 2026-08-09
+
+| Item | Status |
+|---|---|
+| ⭐ Stars | 1 |
+| 🍴 Forks | 0 |
+| 👁 Watchers | 0 |
+| 📋 Open issues | 1 |
+| 🔀 Open PRs | 0 |
+| 💬 Discussions | 3 |
+| 🛡 Security advisories | 0 |
+| 🕐 Last refreshed (UTC) | 2026-08-09 20:45 |
+
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
