@@ -14,6 +14,16 @@
 
 ---
 
+## Proposals in Flight
+
+Active SEAI-P proposals are reviewed independently of the version timeline. Per SEAI GOVERNANCE §3, proposals enter the pipeline as Discussions and are assigned to a version milestone only after community review.
+
+| Proposal | Title | Status | Target Milestone |
+|---|---|---|---|
+| SEAI-P-002 | Behavioral Integrity & Continuous Identity Verification | 🔵 RFC open (14-day window) | Community-decided (none assigned) |
+
+---
+
 ## Version Timeline
 
 ### v1.0 — Core Identity Primitives ✅

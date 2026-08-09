@@ -1,0 +1,22 @@
+{
+  "seai_version": "1.0",
+  "proposal_ref": "SEAI-P-002",
+  "agent_id": "agent-001",
+  "fingerprint_baseline_ref": "birth_certificate#behavioral_baseline:v1",
+  "drift_policy": {
+    "observation_window": "5m",
+    "baseline_age_limit": "30d",
+    "thresholds": {
+      "warning": 0.3,
+      "critical": 0.6,
+      "revoke": 0.85
+    },
+    "intervention_ladder": ["alert", "pause", "revoke", "escalate"]
+  },
+  "continuous_attestation": {
+    "enabled": true,
+    "interval": "5m",
+    "hooks": ["pre_action", "post_turn", "scheduled"]
+  },
+  "fail_closed": true
+}

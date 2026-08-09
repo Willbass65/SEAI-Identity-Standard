@@ -1,0 +1,17 @@
+{
+  "seai_version": "1.0",
+  "proposal_ref": "SEAI-P-002",
+  "agent_id": "agent-001",
+  "event_id": "3f2a1c5e-9b4d-4f6a-8c2e-1a7b3d5f9c0e",
+  "event_type": "deviation_detected",
+  "timestamp_utc": "2026-08-09T18:30:00Z",
+  "drift_score": 0.37,
+  "drift_threshold": 0.4,
+  "fingerprint_hash": "sha256:3287f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0",
+  "intervention": "alert",
+  "metadata": {
+    "observation_window": "5m",
+    "input_volume": 1284,
+    "note": "Deviated from baseline but below threshold; alert raised for monitoring."
+  }
+}

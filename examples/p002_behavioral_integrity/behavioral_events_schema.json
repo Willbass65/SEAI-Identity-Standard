@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Willbass65/SEAI-Identity-Standard/examples/p002_behavioral_integrity/behavioral_events_schema.json",
+  "title": "SEAI-P-002 Behavioral Event Log Entry",
+  "description": "Schema for identity-related behavioral events collected during continuous identity verification in SEAI agents.",
+  "type": "object",
+  "required": [
+    "seai_version",
+    "proposal_ref",
+    "agent_id",
+    "event_id",
+    "event_type",
+    "timestamp_utc",
+    "drift_score"
+  ],
+  "properties": {
+    "seai_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "proposal_ref": {
+      "type": "string",
+      "const": "SEAI-P-002"
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Unique identifier for the AI agent. Must match the agent_id in the birth certificate and P-001 attestation.",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Unique identifier for this event log entry.",
+      "format": "uuid"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "fingerprint_baseline",
+        "fingerprint_check",
+        "deviation_detected",
+        "threshold_exceeded",
+        "intervention_triggered",
+        "identity_rerecognized"
+      ]
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp."
+    },
+    "drift_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Normalized behavioral deviation score (0 = identical to baseline, 1 = maximum deviation)."
+    },
+    "drift_threshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Configured drift threshold for this deployment."
+    },
+    "fingerprint_hash": {
+      "type": "string",
+      "description": "Hash of the behavioral fingerprint observed at this event. Format is implementation-defined."
+    },
+    "intervention": {
+      "type": "string",
+      "enum": ["alert", "pause", "revoke", "escalate", "none"]
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Implementation-specific metadata. Must not contain sensitive training data."
+    }
+  },
+  "additionalProperties": false
+}
