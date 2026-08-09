@@ -1,0 +1,58 @@
+name: Daily Steward — Refresh Scorecard
+
+on:
+  schedule:
+    # 9:00 AM Central Time (14:00 UTC during CDT, 15:00 UTC during CST).
+    # Use 14:00 UTC; the ~1h skew is acceptable for a daily governance refresh.
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+  discussions: read
+  security-events: read
+
+concurrency:
+  group: daily-steward
+  cancel-in-progress: false
+
+jobs:
+  steward:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: .github/steward
+        run: pip install -r requirements.txt
+
+      - name: Run steward (refresh scorecard)
+        working-directory: .github/steward
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT: ${{ github.event_name }}
+          STEWARD_MODE: refresh
+        run: python steward.py
+
+      - name: Commit refreshed scorecard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add SCORECARD.md .github/steward/state.json
+          if git diff --cached --quiet; then
+            echo "No scorecard changes to commit."
+          else
+            git commit -m "Steward: refresh daily scorecard $(date -u +%Y-%m-%d)"
+            git push origin main
+          fi
