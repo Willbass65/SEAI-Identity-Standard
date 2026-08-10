@@ -81,6 +81,7 @@ SEAI is not a reaction to the news. It is the formalization of an idea that was 
 | `diagrams/` | Visual architecture (identity firewall, lineage tree, attestation) |
 | `FAQ.md` | Frequently asked questions |
 | `CONTRIBUTING.md` | How to propose improvements |
+| `SEAI_CANONICAL_LINEAGE.md` | Canonical origin marker — the official SEAI repository & steward |
 | `LICENSE` | Apache 2.0 |
 
 ---
