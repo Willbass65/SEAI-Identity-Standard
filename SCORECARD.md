@@ -14,10 +14,10 @@
 | 🍴 Forks | 0 |
 | 📋 Open Issues | 1 |
 | 💬 Discussions | 5 |
-| 👀 Total Unique Visitors | 42 |
-| 📄 Total Page Views | 130 |
-| 📥 Total Unique Cloners | 58 |
-| 📥 Total Clones | 107 |
+| 👀 Total Unique Visitors | 0 |
+| 📄 Total Page Views | 0 |
+| 📥 Total Unique Cloners | 0 |
+| 📥 Total Clones | 0 |
 
 ---
 
@@ -32,7 +32,7 @@
 | 👀 Unique Visitors | 38 |
 | 📄 Total Views | 45 |
 | 📥 Unique Cloners | 20 |
-| 📥 Total Clones | 107 |
+| 📥 Total Clones | 0 |
 
 **What happened:**
 - SEAI Identity Standard published to GitHub (public, Apache-2.0)
@@ -80,7 +80,7 @@
 | 👀 Unique Visitors | 38 *(no new data yet — LinkedIn just posted)* |
 | 📄 Total Views | 45 |
 | 📥 Unique Cloners | 20 |
-| 📥 Total Clones | 107 |
+| 📥 Total Clones | 0 |
 
 **What happened:**
 - LinkedIn post published (professional announcement)
@@ -151,4 +151,4 @@
 | Open PRs | 0 |
 | Discussions | 5 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-08-11 04:07 |
+| Last refreshed (UTC) | 2026-08-11 14:56 |
