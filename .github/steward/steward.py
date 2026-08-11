@@ -20,6 +20,7 @@ import argparse
 import datetime
 import json
 import os
+import re
 import sys
 
 import requests
@@ -276,17 +277,8 @@ def build_summary(meta, issues, prs, discussions, advisories, since_dt):
     return "\n".join(lines)
 
 
-def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers):
-    """Append a Governance Scorecard section to the existing SCORECARD.md."""
+def _build_gov_block(meta, issues, prs, discussions, advisories):
     date_key = now_utc().strftime("%Y-%m-%d")
-
-    if not os.path.exists(SCORECARD_PATH):
-        print("SCORECARD.md not found; skipping scorecard update.", file=sys.stderr)
-        return False
-
-    with open(SCORECARD_PATH) as fh:
-        content = fh.read()
-
     stars = (meta or {}).get("stargazers_count", 0)
     forks = (meta or {}).get("forks_count", 0)
     watchers = (meta or {}).get("subscribers_count", 0)
@@ -294,36 +286,117 @@ def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, 
     discussion_count = len(discussions) if discussions else 0
     pr_count = len(prs) if prs else 0
     adv_count = len(advisories) if advisories and not isinstance(advisories, dict) else 0
+    return [
+        f"### Governance Scorecard | {date_key}",
+        "",
+        "| Item | Status |",
+        "|---|---|",
+        f"| Stars | {stars} |",
+        f"| Forks | {forks} |",
+        f"| Watchers | {watchers} |",
+        f"| Open issues | {open_issues} |",
+        f"| Open PRs | {pr_count} |",
+        f"| Discussions | {discussion_count} |",
+        f"| Security advisories | {adv_count} |",
+        f"| Last refreshed (UTC) | {now_utc().strftime('%Y-%m-%d %H:%M')} |",
+        "",
+    ]
 
-    gov_lines = []
-    gov_lines.append(f"### Governance Scorecard — {date_key}")
-    gov_lines.append("")
-    gov_lines.append("| Item | Status |")
-    gov_lines.append("|---|---|")
-    gov_lines.append(f"| ⭐ Stars | {stars} |")
-    gov_lines.append(f"| 🍴 Forks | {forks} |")
-    gov_lines.append(f"| 👁 Watchers | {watchers} |")
-    gov_lines.append(f"| 📋 Open issues | {open_issues} |")
-    gov_lines.append(f"| 🔀 Open PRs | {pr_count} |")
-    gov_lines.append(f"| 💬 Discussions | {discussion_count} |")
-    gov_lines.append(f"| 🛡 Security advisories | {adv_count} |")
-    gov_lines.append(f"| 🕐 Last refreshed (UTC) | {now_utc().strftime('%Y-%m-%d %H:%M')} |")
-    gov_lines.append("")
 
+def _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones):
+    """Rewrite the Cumulative Summary table values in place."""
+    stars = (meta or {}).get("stargazers_count", 0)
+    forks = (meta or {}).get("forks_count", 0)
+    watchers = (meta or {}).get("subscribers_count", 0)
+    open_issues = (meta or {}).get("open_issues_count", 0)
+    discussion_count = len(discussions) if discussions else 0
+    views_unique = 0
+    views_total = 0
+    if isinstance(traffic_views, dict) and "count" in traffic_views:
+        views_total = traffic_views.get("count", 0)
+        views_unique = traffic_views.get("uniques", 0)
+    clones_unique = 0
+    clones_total = 0
+    if isinstance(traffic_clones, dict) and "count" in traffic_clones:
+        clones_total = traffic_clones.get("count", 0)
+        clones_unique = traffic_clones.get("uniques", 0)
+
+    # Every row in the cumulative table ends with a value cell. Replace the
+    # value (the last "| N |" on the line) for each metric by matching the
+    # metric label text (which may include an emoji prefix).
+    metrics = [
+        ("Stars", stars),
+        ("Watchers", watchers),
+        ("Forks", forks),
+        ("Open Issues", open_issues),
+        ("Discussions", discussion_count),
+        ("Total Unique Visitors", views_unique),
+        ("Total Page Views", views_total),
+        ("Total Unique Cloners", clones_unique),
+        ("Total Clones", clones_total),
+    ]
+    for label, value in metrics:
+        # Match a table row whose cell contains the label, then replace the
+        # final numeric cell. Handles emoji-prefixed labels like "| ⭐ Stars |".
+        pattern = r"(?m)^(\|(?:(?!\n).)*?" + re.escape(label) + r"[^\n]*\|\s*)(\d+)(\s*\|)"
+        content = re.sub(pattern, lambda m: m.group(1) + str(value) + m.group(3), content)
+    return content
+
+
+def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers):
+    """Update the cumulative summary and replace the single Governance block."""
+    if not os.path.exists(SCORECARD_PATH):
+        print("SCORECARD.md not found; skipping scorecard update.", file=sys.stderr)
+        return False
+
+    with open(SCORECARD_PATH) as fh:
+        content = fh.read()
+
+    # 1) Update the cumulative summary numbers.
+    content = _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones)
+
+    # 2) Remove ALL existing Governance Scorecard blocks (past and present).
+    #    A block starts with a line beginning with "### Governance Scorecard"
+    #    and runs until the footer marker or the next major header.
+    lines = content.splitlines()
+    out = []
+    in_gov = False
+    for ln in lines:
+        if ln.startswith("### Governance Scorecard"):
+            in_gov = True
+            continue
+        if in_gov:
+            # End of the governance block when we hit the footer marker.
+            if ln.startswith("*Scorecard maintained by Cline"):
+                in_gov = False
+                out.append(ln)
+                continue
+            # Skip blank lines and table content inside the block.
+            # Stop skipping if we hit a new top-level or ### header.
+            if ln.startswith("#") :
+                in_gov = False
+                out.append(ln)
+                continue
+            continue
+        out.append(ln)
+    content = "\n".join(out)
+
+    # 3) Append a single fresh Governance block before the footer.
+    content = content.rstrip()
+    block_lines = _build_gov_block(meta, issues, prs, discussions, advisories)
+    content += "\n\n" + "\n".join(block_lines)
+
+    # 4) Ensure footer marker present.
     marker = "*Scorecard maintained by Cline"
-    insertion = "\n".join(gov_lines)
-    if marker in content:
-        content = content.replace(marker, insertion + "\n" + marker)
-    else:
-        content += "\n" + insertion + "\n\n"
+    if marker not in content:
+        content += "\n" + marker
+    content = content.rstrip() + "\n"
 
     with open(SCORECARD_PATH, "w") as fh:
         fh.write(content)
-
     return True
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+
+
 
 def main():
     parser = argparse.ArgumentParser(description="SEAI Daily Steward")
