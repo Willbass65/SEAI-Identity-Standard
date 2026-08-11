@@ -10,14 +10,14 @@
 | Metric | Value |
 |---|---|
 | ⭐ Stars | 1 |
-| 👁 Watchers | 1 |
+| 👁 Watchers | 0 |
 | 🍴 Forks | 0 |
 | 📋 Open Issues | 1 |
-| 💬 Discussions | 1 |
-| 👀 Total Unique Visitors | 38 |
-| 📄 Total Page Views | 45 |
-| 📥 Total Unique Cloners | 20 |
-| 📥 Total Clones | 33 |
+| 💬 Discussions | 5 |
+| 👀 Total Unique Visitors | 42 |
+| 📄 Total Page Views | 130 |
+| 📥 Total Unique Cloners | 58 |
+| 📥 Total Clones | 107 |
 
 ---
 
@@ -32,7 +32,7 @@
 | 👀 Unique Visitors | 38 |
 | 📄 Total Views | 45 |
 | 📥 Unique Cloners | 20 |
-| 📥 Total Clones | 33 |
+| 📥 Total Clones | 107 |
 
 **What happened:**
 - SEAI Identity Standard published to GitHub (public, Apache-2.0)
@@ -80,7 +80,7 @@
 | 👀 Unique Visitors | 38 *(no new data yet — LinkedIn just posted)* |
 | 📄 Total Views | 45 |
 | 📥 Unique Cloners | 20 |
-| 📥 Total Clones | 33 |
+| 📥 Total Clones | 107 |
 
 **What happened:**
 - LinkedIn post published (professional announcement)
@@ -137,83 +137,18 @@
 
 ---
 
-### Governance Scorecard — 2026-08-09
-
-| Item | Status |
-|---|---|
-| ⭐ Stars | 1 |
-| 🍴 Forks | 0 |
-| 👁 Watchers | 0 |
-| 📋 Open issues | 1 |
-| 🔀 Open PRs | 0 |
-| 💬 Discussions | 6 |
-| 🛡 Security advisories | 0 |
-| 🕐 Last refreshed (UTC) | 2026-08-09 17:58 |
-
-### Governance Scorecard — 2026-08-09
-
-| Item | Status |
-|---|---|
-| ⭐ Stars | 1 |
-| 🍴 Forks | 0 |
-| 👁 Watchers | 0 |
-| 📋 Open issues | 1 |
-| 🔀 Open PRs | 0 |
-| 💬 Discussions | 6 |
-| 🛡 Security advisories | 0 |
-| 🕐 Last refreshed (UTC) | 2026-08-09 20:28 |
-
-### Governance Scorecard — 2026-08-09
-
-| Item | Status |
-|---|---|
-| ⭐ Stars | 1 |
-| 🍴 Forks | 0 |
-| 👁 Watchers | 0 |
-| 📋 Open issues | 1 |
-| 🔀 Open PRs | 0 |
-| 💬 Discussions | 3 |
-| 🛡 Security advisories | 0 |
-| 🕐 Last refreshed (UTC) | 2026-08-09 20:45 |
-
-### Governance Scorecard — 2026-08-09
-
-| Item | Status |
-|---|---|
-| ⭐ Stars | 1 |
-| 🍴 Forks | 0 |
-| 👁 Watchers | 0 |
-| 📋 Open issues | 1 |
-| 🔀 Open PRs | 0 |
-| 💬 Discussions | 4 |
-| 🛡 Security advisories | 0 |
-| 🕐 Last refreshed (UTC) | 2026-08-09 21:23 |
-
-### Governance Scorecard — 2026-08-09
-
-| Item | Status |
-|---|---|
-| ⭐ Stars | 1 |
-| 🍴 Forks | 0 |
-| 👁 Watchers | 0 |
-| 📋 Open issues | 1 |
-| 🔀 Open PRs | 0 |
-| 💬 Discussions | 5 |
-| 🛡 Security advisories | 0 |
-| 🕐 Last refreshed (UTC) | 2026-08-09 22:07 |
-
-### Governance Scorecard — 2026-08-10
-
-| Item | Status |
-|---|---|
-| ⭐ Stars | 1 |
-| 🍴 Forks | 0 |
-| 👁 Watchers | 0 |
-| 📋 Open issues | 1 |
-| 🔀 Open PRs | 0 |
-| 💬 Discussions | 5 |
-| 🛡 Security advisories | 0 |
-| 🕐 Last refreshed (UTC) | 2026-08-10 14:58 |
-
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
+
+### Governance Scorecard | 2026-08-11
+
+| Item | Status |
+|---|---|
+| Stars | 1 |
+| Forks | 0 |
+| Watchers | 0 |
+| Open issues | 1 |
+| Open PRs | 0 |
+| Discussions | 5 |
+| Security advisories | 0 |
+| Last refreshed (UTC) | 2026-08-11 04:07 |
