@@ -304,26 +304,30 @@ def _build_gov_block(meta, issues, prs, discussions, advisories):
 
 
 def _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones):
-    """Rewrite the Cumulative Summary table values in place."""
+    """Rewrite the Cumulative Summary table values in place.
+
+    Traffic values (views/clones) are only updated when the traffic API
+    returned valid data. If the traffic endpoint is unavailable or errors,
+    the existing (last-known) values are left untouched instead of being
+    overwritten with zero.
+    """
     stars = (meta or {}).get("stargazers_count", 0)
     forks = (meta or {}).get("forks_count", 0)
     watchers = (meta or {}).get("subscribers_count", 0)
     open_issues = (meta or {}).get("open_issues_count", 0)
     discussion_count = len(discussions) if discussions else 0
-    views_unique = 0
-    views_total = 0
-    if isinstance(traffic_views, dict) and "count" in traffic_views:
-        views_total = traffic_views.get("count", 0)
-        views_unique = traffic_views.get("uniques", 0)
-    clones_unique = 0
-    clones_total = 0
-    if isinstance(traffic_clones, dict) and "count" in traffic_clones:
-        clones_total = traffic_clones.get("count", 0)
-        clones_unique = traffic_clones.get("uniques", 0)
 
-    # Every row in the cumulative table ends with a value cell. Replace the
-    # value (the last "| N |" on the line) for each metric by matching the
-    # metric label text (which may include an emoji prefix).
+    # Only trust traffic numbers when the API returned a valid payload.
+    views_unique = views_total = None
+    if isinstance(traffic_views, dict) and "count" in traffic_views and not traffic_views.get("_error"):
+        views_total = traffic_views.get("count")
+        views_unique = traffic_views.get("uniques")
+    clones_unique = clones_total = None
+    if isinstance(traffic_clones, dict) and "count" in traffic_clones and not traffic_clones.get("_error"):
+        clones_total = traffic_clones.get("count")
+        clones_unique = traffic_clones.get("uniques")
+
+    # (label, value) pairs; value may be None => leave the existing row alone.
     metrics = [
         ("Stars", stars),
         ("Watchers", watchers),
@@ -336,11 +340,15 @@ def _update_cumulative_summary(content, meta, discussions, traffic_views, traffi
         ("Total Clones", clones_total),
     ]
     for label, value in metrics:
+        if value is None:
+            # No valid data for this metric; preserve the existing value.
+            continue
         # Match a table row whose cell contains the label, then replace the
         # final numeric cell. Handles emoji-prefixed labels like "| ⭐ Stars |".
         pattern = r"(?m)^(\|(?:(?!\n).)*?" + re.escape(label) + r"[^\n]*\|\s*)(\d+)(\s*\|)"
         content = re.sub(pattern, lambda m: m.group(1) + str(value) + m.group(3), content)
     return content
+
 
 
 def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers):
