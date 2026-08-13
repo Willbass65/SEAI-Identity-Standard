@@ -14,10 +14,10 @@
 | 🍴 Forks | 0 |
 | 📋 Open Issues | 1 |
 | 💬 Discussions | 5 |
-| 👀 Total Unique Visitors | 0 |
-| 📄 Total Page Views | 0 |
-| 📥 Total Unique Cloners | 0 |
-| 📥 Total Clones | 0 |
+| 👀 Total Unique Visitors | 44 |
+| 📄 Total Page Views | 148 |
+| 📥 Total Unique Cloners | 65 |
+| 📥 Total Clones | 123 |
 
 ---
 
@@ -103,6 +103,7 @@
 | Aug 7, 2026 | 🔍 First search engine referral (Kagi) |
 | Aug 7, 2026 | 📡 First aggregator referral (Fullstackfeed) |
 | Aug 8, 2026 | 💼 LinkedIn post published |
+| Aug 13, 2026 | 🏷️ First signed release tag — `seai-v1.0.0` (GPG-verified) |
 | _Pending_ | 🍴 First fork |
 | _Pending_ | 💬 First external discussion comment |
 | _Pending_ | 📋 First external issue |
@@ -137,6 +138,13 @@
 
 ---
 
+## Official Release Ledger
+
+| Release | Type | Signed | Date |
+|---|---|---|---|
+| `seai-v1.0.0` | Initial release | ✅ GPG-signed (William Bassett Jr.) | Aug 13, 2026 |
+
+---
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
