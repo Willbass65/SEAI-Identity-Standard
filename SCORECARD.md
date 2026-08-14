@@ -15,9 +15,9 @@
 | 📋 Open Issues | 1 |
 | 💬 Discussions | 5 |
 | 👀 Total Unique Visitors | 44 |
-| 📄 Total Page Views | 148 |
-| 📥 Total Unique Cloners | 65 |
-| 📥 Total Clones | 123 |
+| 📄 Total Page Views | 153 |
+| 📥 Total Unique Cloners | 71 |
+| 📥 Total Clones | 133 |
 
 ---
 
@@ -32,7 +32,7 @@
 | 👀 Unique Visitors | 38 |
 | 📄 Total Views | 45 |
 | 📥 Unique Cloners | 20 |
-| 📥 Total Clones | 123 |
+| 📥 Total Clones | 133 |
 
 **What happened:**
 - SEAI Identity Standard published to GitHub (public, Apache-2.0)
@@ -80,7 +80,7 @@
 | 👀 Unique Visitors | 38 *(no new data yet — LinkedIn just posted)* |
 | 📄 Total Views | 45 |
 | 📥 Unique Cloners | 20 |
-| 📥 Total Clones | 123 |
+| 📥 Total Clones | 133 |
 
 **What happened:**
 - LinkedIn post published (professional announcement)
@@ -148,7 +148,7 @@
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
-### Governance Scorecard | 2026-08-13
+### Governance Scorecard | 2026-08-14
 
 | Item | Status |
 |---|---|
@@ -159,4 +159,4 @@
 | Open PRs | 0 |
 | Discussions | 5 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-08-13 23:39 |
+| Last refreshed (UTC) | 2026-08-14 10:42 |
