@@ -16,8 +16,16 @@
 | 💬 Discussions | 6 |
 | 👀 Total Unique Visitors | 45 |
 | 📄 Total Page Views | 154 |
+| 📄 Adjusted Page Views (excl. owner) | 119 |
 | 📥 Total Unique Cloners | 73 |
 | 📥 Total Clones | 138 |
+
+> **Self-traffic accounting:** GitHub's traffic API cannot exclude the owner. The
+> adjusted figure subtracts views on provably admin-only pages (`/pulse`,
+> `/graphs/*` — 35 views as of Aug 16), which only someone with push access can
+> generate. `/community` (5 views) is public but almost certainly owner traffic
+> and is *not* subtracted. Owner browsing is expected and accounted for — the
+> adjusted number is the honest baseline for measuring announcements.
 
 ---
 
@@ -114,7 +122,7 @@
 | Aug 14 | 1 (1 uniq) | 3 (3 uniq) |
 | Aug 15 | 0 | 2 (2 uniq) |
 
-**Key insight:** The cloner-to-visitor ratio remains inverted — **73 unique cloners vs 45 unique visitors (162%)**. Real human browsing typically yields 5–15% clone rates. This pattern is consistent with scripted/automated evaluation (single-institution evaluation hypothesis stands). The evaluation burst appears complete; the quiet baseline is now established.
+**Key insight:** The cloner-to-visitor ratio remains inverted — **73 unique cloners vs 45 unique visitors (162%)**. Real human browsing typically yields 5–15% clone rates. This pattern is consistent with scripted/automated evaluation (**founder-observed hypothesis**, William Bassett Jr.). The evaluation burst appears complete; the quiet baseline is now established.
 
 ---
 
@@ -143,13 +151,23 @@
 
 ## Referrer History
 
-| Referrer | First Seen | Latest Unique Count |
-|---|---|---|
-| news.ycombinator.com | Aug 7 | 5 |
-| fullstackfeed.com | Aug 7 | 1 |
-| kagi.com | Aug 7 | 1 |
-| LinkedIn | Aug 8 | _pending_ |
-| Reddit | Aug 7 | _included in direct/unknown_ |
+*(Verified against the GitHub traffic API, Aug 16, 2026 — 14-day window)*
+
+| Referrer | First Seen | Latest Unique Count | Notes |
+|---|---|---|---|
+| Direct / Unknown | Aug 7 | — | Largest source by remainder; includes the clone-only activity |
+| news.ycombinator.com | Aug 7 | 6 | Only channel with verified attributable visitors |
+| kagi.com | Aug 7 | 3 | Search referral |
+| fullstackfeed.com | Aug 7 | 1 | Aggregator |
+| linkedin.com | Aug 8 | 1 | 3 views / 1 unique total |
+| github.com | Aug 7 | 1 | 41 views / 1 unique — **self-traffic** (owner browsing the web UI) |
+| t.co / twitter.com | — | **0** | **Null result:** X post live since launch week, zero referrer traffic in 9+ days |
+
+**Attribution caveat:** `git clone` operations carry no referrer data. Clone
+activity (73 unique cloners vs 45 unique visitors — 162%) cannot be attributed
+to any channel. The single-institution automated-evaluation hypothesis is
+**founder-observed** (William Bassett Jr.), based on the inverted cloner/visitor
+ratio and burst timing — not inferred from referrer data.
 
 ---
 
@@ -161,8 +179,14 @@
 | Aug 7 | Hacker News | ✅ Posted |
 | Aug 7 | Reddit r/AISafety | ✅ Posted |
 | Aug 7 | Reddit r/OpenSourceAI | ✅ Posted |
+| Aug 7–8 | Twitter/X | ✅ Posted (launch week, by William) — no measurable referrer traffic (see Referrer History) |
 | Aug 8 | LinkedIn | ✅ Posted |
-| _Pending_ | Twitter/X | 📋 Ready (text in ANNOUNCEMENTS.md) |
+| Aug 17 (~8 PM CT) | Hacker News + LinkedIn | 📋 Planned — Wave 1: v1.0.0 signed release + HTSC discussion. Timed for APAC Tuesday morning |
+| Aug 22–23 | Twitter/X | 📋 Planned — Wave 2: isolated re-test on slow traffic days |
+
+**Announcement experiment design:** Wave 1 (HN + LinkedIn) and Wave 2 (X) are
+separated by five days and by channel so each wave gets its own measurable
+window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 
 ---
 

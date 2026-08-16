@@ -112,5 +112,106 @@ GitHub: https://github.com/Willbass65/SEAI-Identity-Standard
 
 ---
 
+# Wave 1 — Monday Aug 17, ~8:00 PM CT (HN + LinkedIn, no X)
+
+*Release-focused follow-up: v1.0.0 GPG-signed release + HTSC discussion invite.
+Timed for APAC Tuesday morning (~9–11 AM JST/SGT/AEST). X is deliberately
+excluded — Wave 2 runs it separately Aug 22–23 for clean attribution.*
+
+## Hacker News (Wave 1)
+
+**Title:**
+Show HN: SEAI Identity Standard v1.0 — GPG-signed release, hardware-rooted birth certificates for AI
+
+**URL:**
+https://github.com/Willbass65/SEAI-Identity-Standard/releases/tag/seai-v1.0.0
+
+**First comment (post immediately after submitting):**
+
+We shipped v1.0.0 as a GPG-signed release — every artifact in the release is
+verifiable against our public key (see the release notes for the fingerprint).
+
+What SEAI is: an open standard (Apache-2.0) giving every AI agent a
+cryptographic birth certificate — hardware attestation, lineage tracking,
+authority scopes, revocation, and an identity firewall that verifies before
+every action.
+
+What's new since our launch post: the signed release, and an open proposal —
+Hardware Time Source Capability (HTSC) — which makes devices honest about
+*untrusted clocks* (e.g., edge hardware with no RTC booting grid-down). The
+hash-chain anchoring question in that discussion is genuinely open; we'd value
+input from anyone who has dealt with tamper-evidence on hardware without a
+secure element:
+
+https://github.com/Willbass65/SEAI-Identity-Standard/discussions/15
+
+Not a product, not a SaaS — a spec, five reference examples, and diagrams.
+Feedback welcome, especially harsh feedback.
+
+## LinkedIn (Wave 1)
+
+**Post:**
+
+SEAI Identity Standard v1.0.0 is now a signed release.
+
+Every artifact in the release is GPG-verifiable — because a trust standard
+that ships unsigned would be a contradiction.
+
+What's in v1.0.0:
+• The full specification (Apache-2.0)
+• Five reference birth certificate examples
+• System diagrams
+• A signed, immutable release tag
+
+We've also opened our first standards proposal for community discussion:
+Hardware Time Source Capability (HTSC) — requiring devices to declare, at
+birth, what time sources their hardware can actually provide. It came out of
+a real defect we found in our own edge hardware: a device with no
+battery-backed RTC, booting in a grid-down environment, will confidently
+timestamp events with the wrong clock. A trust standard has to be honest
+about that failure mode.
+
+The proposal is open here — institutional and evaluator feedback especially
+welcome:
+
+https://github.com/Willbass65/SEAI-Identity-Standard/discussions/15
+
+SEAI is not a product. It is a standard — free, open, sovereign.
+
+Our mission is simple: give AI the trust it can earn.
+
+https://github.com/Willbass65/SEAI-Identity-Standard
+
+#AISafety #OpenSource #Identity #AutonomousSystems #EdgeComputing
+
+---
+
+# Wave 2 — Aug 22–23 (Twitter/X only, isolated re-test)
+
+*Runs alone on deliberately slow traffic days so any signal is attributable.
+The launch-week X post produced zero measurable referrer traffic over 9+ days
+(verified null result — see SCORECARD.md Referrer History), so this is a
+genuine re-test with release-focused framing, not a repeat.*
+
+## Twitter/X (Wave 2)
+
+**Post:**
+
+SEAI Identity Standard v1.0.0 — now a GPG-signed release.
+
+Birth certificates for AI agents: hardware attestation, lineage, authority
+scopes, revocation. Every release artifact verifiable.
+
+Because a trust standard that ships unsigned is a contradiction.
+
+Open proposal live now — Hardware Time Source Capability (HTSC):
+making devices honest about untrusted clocks.
+
+https://github.com/Willbass65/SEAI-Identity-Standard
+
+#AI #AISafety #OpenSource #Cybersecurity
+
+---
+
 *All announcements should be posted in the name of ALBOE USA LLC.*
 *Authored by William Bassett Jr.*

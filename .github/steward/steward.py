@@ -154,6 +154,39 @@ def collect_traffic_clones():
 def collect_referrers():
     return api_get(f"repos/{REPO}/traffic/popular/referrers")
 
+# Popular-path fragments that are provably admin-only pages: they require push
+# access to view, so any views on them are owner (self) traffic and are excluded
+# from the "Adjusted Page Views" figure. NOTE: "/community" is public, so it is
+# deliberately NOT in this list even though it is likely owner traffic.
+ADMIN_VIEW_PATH_FRAGMENTS = ("/pulse", "/graphs/")
+
+
+def collect_popular_paths():
+    return api_get(f"repos/{REPO}/traffic/popular/paths")
+
+
+def compute_adjusted_views(traffic_views, popular_paths):
+    """Return (adjusted_total, admin_views) or (None, None) without valid data.
+
+    adjusted_total = raw total views minus views on provably admin-only pages
+    (/pulse, /graphs/*). This gives an honest baseline for measuring the effect
+    of announcements without owner browsing polluting the signal.
+    """
+    if not (isinstance(traffic_views, dict) and "count" in traffic_views
+            and not traffic_views.get("_error")):
+        return None, None
+    views_total = traffic_views.get("count")
+    admin_views = 0
+    if isinstance(popular_paths, list):
+        for p in popular_paths:
+            path = p.get("path", "")
+            if any(frag in path for frag in ADMIN_VIEW_PATH_FRAGMENTS):
+                try:
+                    admin_views += int(p.get("count", 0))
+                except (TypeError, ValueError):
+                    pass
+    return max(views_total - admin_views, 0), admin_views
+
 
 def collect_discussions():
     """Fetch discussions via GraphQL."""
@@ -303,13 +336,16 @@ def _build_gov_block(meta, issues, prs, discussions, advisories):
     ]
 
 
-def _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones):
+def _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones, popular_paths=None):
     """Rewrite the Cumulative Summary table values in place.
 
     Traffic values (views/clones) are only updated when the traffic API
     returned valid data. If the traffic endpoint is unavailable or errors,
     the existing (last-known) values are left untouched instead of being
     overwritten with zero.
+
+    Also refreshes the "Adjusted Page Views" row when both the views total and
+    the popular-paths payloads are valid; otherwise that row is preserved.
     """
     stars = (meta or {}).get("stargazers_count", 0)
     forks = (meta or {}).get("forks_count", 0)
@@ -327,6 +363,9 @@ def _update_cumulative_summary(content, meta, discussions, traffic_views, traffi
         clones_total = traffic_clones.get("count")
         clones_unique = traffic_clones.get("uniques")
 
+    # Adjusted views (raw minus provably-admin pages); None => preserve row.
+    adjusted_views, _admin = compute_adjusted_views(traffic_views, popular_paths)
+
     # (label, value) pairs; value may be None => leave the existing row alone.
     metrics = [
         ("Stars", stars),
@@ -336,6 +375,7 @@ def _update_cumulative_summary(content, meta, discussions, traffic_views, traffi
         ("Discussions", discussion_count),
         ("Total Unique Visitors", views_unique),
         ("Total Page Views", views_total),
+        ("Adjusted Page Views", adjusted_views),
         ("Total Unique Cloners", clones_unique),
         ("Total Clones", clones_total),
     ]
@@ -351,7 +391,7 @@ def _update_cumulative_summary(content, meta, discussions, traffic_views, traffi
 
 
 
-def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers):
+def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers, popular_paths=None):
     """Update the cumulative summary and replace the single Governance block."""
     if not os.path.exists(SCORECARD_PATH):
         print("SCORECARD.md not found; skipping scorecard update.", file=sys.stderr)
@@ -361,7 +401,7 @@ def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, 
         content = fh.read()
 
     # 1) Update the cumulative summary numbers.
-    content = _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones)
+    content = _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones, popular_paths)
 
     # 2) Remove ALL existing Governance Scorecard blocks (past and present).
     #    A block starts with a line beginning with "### Governance Scorecard"
@@ -423,6 +463,7 @@ def main():
     traffic_views = collect_traffic_views()
     traffic_clones = collect_traffic_clones()
     referrers = collect_referrers()
+    popular_paths = collect_popular_paths()
 
     if args.mode == "summary":
         out = build_summary(meta, issues, prs, discussions, advisories, since_dt)
@@ -430,7 +471,7 @@ def main():
     else:
         ok = update_scorecard(
             meta, issues, prs, discussions, advisories,
-            traffic_views, traffic_clones, referrers,
+            traffic_views, traffic_clones, referrers, popular_paths,
         )
         if ok:
             print("Scorecard refreshed.")
