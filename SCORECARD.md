@@ -200,7 +200,7 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
-### Governance Scorecard | 2026-08-19
+### Governance Scorecard | 2026-08-20
 
 | Item | Status |
 |---|---|
@@ -211,4 +211,4 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 | Open PRs | 0 |
 | Discussions | 6 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-08-19 14:33 |
+| Last refreshed (UTC) | 2026-08-20 14:35 |
