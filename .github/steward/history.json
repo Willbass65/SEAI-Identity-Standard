@@ -1,0 +1,88 @@
+{
+  "days": {
+    "2026-08-07": {
+      "clones": 33,
+      "clones_uniques": 20,
+      "views": 45,
+      "views_uniques": 38
+    },
+    "2026-08-08": {
+      "clones": 20,
+      "clones_uniques": 12,
+      "views": 21,
+      "views_uniques": 4
+    },
+    "2026-08-09": {
+      "clones": 54,
+      "clones_uniques": 28,
+      "views": 64,
+      "views_uniques": 2
+    },
+    "2026-08-10": {
+      "clones": 9,
+      "clones_uniques": 6,
+      "views": 7,
+      "views_uniques": 3
+    },
+    "2026-08-11": {
+      "clones": 5,
+      "clones_uniques": 5,
+      "views": 10,
+      "views_uniques": 1
+    },
+    "2026-08-12": {
+      "clones": 2,
+      "clones_uniques": 2,
+      "views": 1,
+      "views_uniques": 1
+    },
+    "2026-08-13": {
+      "clones": 10,
+      "clones_uniques": 7,
+      "views": 5,
+      "views_uniques": 1
+    },
+    "2026-08-14": {
+      "clones": 3,
+      "clones_uniques": 3,
+      "views": 1,
+      "views_uniques": 1
+    },
+    "2026-08-15": {
+      "clones": 2,
+      "clones_uniques": 2,
+      "views": 0,
+      "views_uniques": 0
+    },
+    "2026-08-16": {
+      "clones": 6,
+      "clones_uniques": 5,
+      "views": 0,
+      "views_uniques": 0
+    },
+    "2026-08-17": {
+      "clones": 3,
+      "clones_uniques": 3,
+      "views": 1,
+      "views_uniques": 1
+    },
+    "2026-08-18": {
+      "clones": 2,
+      "clones_uniques": 2,
+      "views": 0,
+      "views_uniques": 0
+    },
+    "2026-08-19": {
+      "clones": 2,
+      "clones_uniques": 2,
+      "views": 0,
+      "views_uniques": 0
+    },
+    "2026-08-20": {
+      "clones": 10,
+      "clones_uniques": 6,
+      "views": 0,
+      "views_uniques": 0
+    }
+  }
+}

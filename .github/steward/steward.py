@@ -30,12 +30,20 @@ import requests
 # ---------------------------------------------------------------------------
 
 REPO = os.environ.get("GITHUB_REPOSITORY", "Willbass65/SEAI-Identity-Standard")
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Prefer the steward PAT (full user token) over the Actions GITHUB_TOKEN:
+# the traffic endpoints require push-level access that the Actions token
+# does not reliably have, which froze the cumulative numbers in Aug 2026.
+TOKEN = os.environ.get("STEWARD_PAT") or os.environ.get("GITHUB_TOKEN", "")
 API = "https://api.github.com"
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 SCORECARD_PATH = os.path.join(REPO_ROOT, "SCORECARD.md")
 STATE_PATH = os.path.join(HERE, "state.json")
+# Lifetime daily ledger: survives GitHub's 14-day traffic window so full
+# history is preserved for any later review. Format:
+#   {"days": {"2026-08-07": {"views": 45, "views_uniques": 38,
+#                            "clones": 33, "clones_uniques": 20}, ...}}
+HISTORY_PATH = os.path.join(HERE, "history.json")
 
 OWNER, NAME = REPO.split("/", 1)
 HEADERS = {}
@@ -70,6 +78,52 @@ def load_state():
 def save_state(state):
     with open(STATE_PATH, "w") as fh:
         json.dump(state, fh, indent=2)
+
+
+def load_history():
+    if os.path.exists(HISTORY_PATH):
+        try:
+            with open(HISTORY_PATH) as fh:
+                data = json.load(fh)
+            if isinstance(data, dict) and isinstance(data.get("days"), dict):
+                return data["days"]
+        except Exception:
+            pass
+    return {}
+
+
+def save_history(days):
+    with open(HISTORY_PATH, "w") as fh:
+        json.dump({"days": days}, fh, indent=2, sort_keys=True)
+
+
+def merge_history(days, traffic_views, traffic_clones):
+    """Fold the current 14-day traffic window into the lifetime ledger.
+
+    Each run upserts per-day values; ``max`` is used so late revisions by
+    GitHub (counts sometimes tick up hours later) are captured without ever
+    double-counting. Days that age out of the API window keep their last
+    recorded value forever.
+    """
+    def absorb(payload, list_key, count_field, uniques_field):
+        if not (isinstance(payload, dict) and isinstance(payload.get(list_key), list)):
+            return
+        for entry in payload.get(list_key) or []:
+            if not isinstance(entry, dict):
+                continue
+            day = (entry.get("timestamp") or "")[:10]
+            if not day:
+                continue
+            d = days.setdefault(day, {})
+            try:
+                d[count_field] = max(d.get(count_field) or 0, int(entry.get("count") or 0))
+                d[uniques_field] = max(d.get(uniques_field) or 0, int(entry.get("uniques") or 0))
+            except (TypeError, ValueError):
+                continue
+
+    absorb(traffic_views, "views", "views", "views_uniques")
+    absorb(traffic_clones, "clones", "clones", "clones_uniques")
+    return days
 
 
 def api_get(path, params=None):
@@ -336,63 +390,104 @@ def _build_gov_block(meta, issues, prs, discussions, advisories):
     ]
 
 
-def _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones, popular_paths=None):
-    """Rewrite the Cumulative Summary table values in place.
+def _rebuild_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones, popular_paths, history):
+    """Rewrite the Cumulative Summary table from the lifetime ledger.
 
-    Traffic values (views/clones) are only updated when the traffic API
-    returned valid data. If the traffic endpoint is unavailable or errors,
-    the existing (last-known) values are left untouched instead of being
-    overwritten with zero.
-
-    Also refreshes the "Adjusted Page Views" row when both the views total and
-    the popular-paths payloads are valid; otherwise that row is preserved.
+    Totals (clones/views counts) are LIFETIME figures summed from the daily
+    ledger, so they never shrink when days age out of GitHub's 14-day window.
+    Unique counts and adjusted views are only available per 14-day window and
+    are labeled as such. If a metric has no valid data, its row is preserved.
     """
-    stars = (meta or {}).get("stargazers_count", 0)
-    forks = (meta or {}).get("forks_count", 0)
-    watchers = (meta or {}).get("subscribers_count", 0)
-    open_issues = (meta or {}).get("open_issues_count", 0)
-    discussion_count = len(discussions) if discussions else 0
+    stars = (meta or {}).get("stargazers_count")
+    forks = (meta or {}).get("forks_count")
+    watchers = (meta or {}).get("subscribers_count")
+    open_issues = (meta or {}).get("open_issues_count")
+    discussion_count = len(discussions) if discussions else None
 
-    # Only trust traffic numbers when the API returned a valid payload.
-    views_unique = views_total = None
+    lifetime_views = lifetime_clones = None
+    if history:
+        lifetime_views = sum((d.get("views") or 0) for d in history.values())
+        lifetime_clones = sum((d.get("clones") or 0) for d in history.values())
+
+    views_unique = clones_unique = None
     if isinstance(traffic_views, dict) and "count" in traffic_views and not traffic_views.get("_error"):
-        views_total = traffic_views.get("count")
         views_unique = traffic_views.get("uniques")
-    clones_unique = clones_total = None
     if isinstance(traffic_clones, dict) and "count" in traffic_clones and not traffic_clones.get("_error"):
-        clones_total = traffic_clones.get("count")
         clones_unique = traffic_clones.get("uniques")
-
-    # Adjusted views (raw minus provably-admin pages); None => preserve row.
     adjusted_views, _admin = compute_adjusted_views(traffic_views, popular_paths)
 
-    # (label, value) pairs; value may be None => leave the existing row alone.
-    metrics = [
-        ("Stars", stars),
-        ("Watchers", watchers),
-        ("Forks", forks),
-        ("Open Issues", open_issues),
-        ("Discussions", discussion_count),
-        ("Total Unique Visitors", views_unique),
-        ("Total Page Views", views_total),
-        ("Adjusted Page Views", adjusted_views),
-        ("Total Unique Cloners", clones_unique),
-        ("Total Clones", clones_total),
+    rows = [
+        ("⭐ Stars", stars),
+        ("👁 Watchers", watchers),
+        ("🍴 Forks", forks),
+        ("📋 Open Issues", open_issues),
+        ("💬 Discussions", discussion_count),
+        ("👀 Unique Visitors (14-day window)", views_unique),
+        ("📄 Page Views (lifetime)", lifetime_views),
+        ("📄 Adjusted Page Views (14-day window)", adjusted_views),
+        ("📥 Unique Cloners (14-day window)", clones_unique),
+        ("📥 Total Clones (lifetime)", lifetime_clones),
     ]
-    for label, value in metrics:
-        if value is None:
-            # No valid data for this metric; preserve the existing value.
-            continue
-        # Match a table row whose cell contains the label, then replace the
-        # final numeric cell. Handles emoji-prefixed labels like "| ⭐ Stars |".
-        pattern = r"(?m)^(\|(?:(?!\n).)*?" + re.escape(label) + r"[^\n]*\|\s*)(\d+)(\s*\|)"
-        content = re.sub(pattern, lambda m: m.group(1) + str(value) + m.group(3), content)
+    table_lines = ["| Metric | Value |", "|---|---|"]
+    for label, value in rows:
+        table_lines.append(f"| {label} | {value if value is not None else '—'} |")
+    new_table = "\n".join(table_lines)
+
+    # Replace only the table directly under the Cumulative Summary header.
+    # The note (blockquote) and everything after it is preserved untouched,
+    # which also protects the manual Daily Breakdown sections below.
+    pattern = re.compile(
+        r"(## Cumulative Summary[^\n]*\n\n)\| Metric \| Value \|\n\|---\|---\|\n(?:\|[^\n]*\n)+"
+    )
+    if pattern.search(content):
+        content = pattern.sub(lambda m: m.group(1) + new_table + "\n", content, count=1)
     return content
 
 
+HISTORY_BEGIN = "<!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->"
+HISTORY_END = "<!-- END daily-history -->"
 
-def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers, popular_paths=None):
-    """Update the cumulative summary and replace the single Governance block."""
+
+def _build_daily_history_block(history):
+    lines = [
+        "## Daily History (Automated Ledger)",
+        "",
+        "> Maintained automatically by the daily steward from the GitHub Traffic API.",
+        "> One row per day since launch. Rows never expire — unlike GitHub's own",
+        "> 14-day traffic window, this ledger preserves the full history for review.",
+        "",
+        HISTORY_BEGIN,
+        "",
+        "| Date | Views | Uniq. Visitors | Clones | Uniq. Cloners |",
+        "|---|---|---|---|---|",
+    ]
+    for day in sorted(history):
+        d = history[day]
+        lines.append(
+            f"| {day} | {d.get('views', 0)} | {d.get('views_uniques', 0)} "
+            f"| {d.get('clones', 0)} | {d.get('clones_uniques', 0)} |"
+        )
+    lines.append("")
+    lines.append(HISTORY_END)
+    return "\n".join(lines)
+
+
+def _update_daily_history(content, history):
+    """Insert or refresh the auto-maintained daily history table."""
+    if not history:
+        return content
+    block = _build_daily_history_block(history)
+    if HISTORY_BEGIN in content:
+        pattern = re.compile(re.escape(HISTORY_BEGIN) + r".*?" + re.escape(HISTORY_END), re.S)
+        return pattern.sub(lambda m: block, content, count=1)
+    if "\n## Milestones" in content:
+        return content.replace("\n## Milestones", "\n" + block + "\n\n## Milestones", 1)
+    return content.rstrip() + "\n\n" + block + "\n"
+
+
+
+def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, traffic_clones, referrers, popular_paths=None, history=None):
+    """Update the cumulative summary, daily history ledger table, and governance block."""
     if not os.path.exists(SCORECARD_PATH):
         print("SCORECARD.md not found; skipping scorecard update.", file=sys.stderr)
         return False
@@ -400,8 +495,11 @@ def update_scorecard(meta, issues, prs, discussions, advisories, traffic_views, 
     with open(SCORECARD_PATH) as fh:
         content = fh.read()
 
-    # 1) Update the cumulative summary numbers.
-    content = _update_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones, popular_paths)
+    # 1) Rebuild the cumulative summary from the lifetime ledger.
+    content = _rebuild_cumulative_summary(content, meta, discussions, traffic_views, traffic_clones, popular_paths, history or {})
+
+    # 1b) Refresh the auto-maintained daily history table.
+    content = _update_daily_history(content, history or {})
 
     # 2) Remove ALL existing Governance Scorecard blocks (past and present).
     #    A block starts with a line beginning with "### Governance Scorecard"
@@ -453,6 +551,7 @@ def main():
     args = parser.parse_args()
 
     state = load_state()
+    history = load_history()
     since_dt = now_utc() - datetime.timedelta(hours=args.since_hours)
 
     meta = collect_meta()
@@ -465,6 +564,11 @@ def main():
     referrers = collect_referrers()
     popular_paths = collect_popular_paths()
 
+    # Fold today's traffic window into the lifetime ledger BEFORE updating
+    # the scorecard, so cumulative totals and the daily history table are
+    # computed from the complete ledger.
+    merge_history(history, traffic_views, traffic_clones)
+
     if args.mode == "summary":
         out = build_summary(meta, issues, prs, discussions, advisories, since_dt)
         print(out)
@@ -472,6 +576,7 @@ def main():
         ok = update_scorecard(
             meta, issues, prs, discussions, advisories,
             traffic_views, traffic_clones, referrers, popular_paths,
+            history=history,
         )
         if ok:
             print("Scorecard refreshed.")
@@ -482,6 +587,7 @@ def main():
     state["last_run"] = now_utc().isoformat()
     state["last_refresh"] = now_utc().isoformat()
     save_state(state)
+    save_history(history)
 
 
 if __name__ == "__main__":
