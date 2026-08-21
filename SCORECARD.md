@@ -132,6 +132,12 @@
 > One row per day since launch. Rows never expire — unlike GitHub's own
 > 14-day traffic window, this ledger preserves the full history for review.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
 | Date | Views | Uniq. Visitors | Clones | Uniq. Cloners |
@@ -238,4 +244,4 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 | Open PRs | 0 |
 | Discussions | 6 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-08-21 10:40 |
+| Last refreshed (UTC) | 2026-08-21 10:42 |
