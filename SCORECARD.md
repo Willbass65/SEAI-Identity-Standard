@@ -14,11 +14,11 @@
 | 🍴 Forks | 0 |
 | 📋 Open Issues | 1 |
 | 💬 Discussions | 6 |
-| 👀 Unique Visitors (14-day window) | 46 |
+| 👀 Unique Visitors (14-day window) | 10 |
 | 📄 Page Views (lifetime) | 155 |
-| 📄 Adjusted Page Views (14-day window) | 120 |
-| 📥 Unique Cloners (14-day window) | 83 |
-| 📥 Total Clones (lifetime) | 161 |
+| 📄 Adjusted Page Views (14-day window) | 75 |
+| 📥 Unique Cloners (14-day window) | 73 |
+| 📥 Total Clones (lifetime) | 177 |
 
 > **Self-traffic accounting:** GitHub's traffic API cannot exclude the owner. The
 > adjusted figure subtracts views on provably admin-only pages (`/pulse`,
@@ -144,6 +144,12 @@
 > One row per day since launch. Rows never expire — unlike GitHub's own
 > 14-day traffic window, this ledger preserves the full history for review.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
 | Date | Views | Uniq. Visitors | Clones | Uniq. Cloners |
@@ -162,6 +168,7 @@
 | 2026-08-18 | 0 | 0 | 2 | 2 |
 | 2026-08-19 | 0 | 0 | 2 | 2 |
 | 2026-08-20 | 0 | 0 | 10 | 6 |
+| 2026-08-21 | 0 | 0 | 16 | 11 |
 
 <!-- END daily-history -->
 
@@ -239,7 +246,7 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
-### Governance Scorecard | 2026-08-21
+### Governance Scorecard | 2026-08-22
 
 | Item | Status |
 |---|---|
@@ -250,4 +257,4 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 | Open PRs | 0 |
 | Discussions | 6 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-08-21 14:34 |
+| Last refreshed (UTC) | 2026-08-22 14:20 |
