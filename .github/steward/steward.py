@@ -448,6 +448,24 @@ HISTORY_BEGIN = "<!-- BEGIN daily-history (auto-maintained by the steward; do no
 HISTORY_END = "<!-- END daily-history -->"
 
 
+def _classify_day(d):
+    """Classify a day's traffic signature.
+
+    extraction — clones with zero views: automated/farming signature (git
+                  clones never touch the web UI, so view-less clone days are
+                  machine pulls, not human evaluation).
+    engaged    — at least one page view alongside any activity.
+    quiet      — no traffic at all.
+    """
+    views = d.get("views") or 0
+    clones = d.get("clones") or 0
+    if clones and not views:
+        return "extraction"
+    if views or clones:
+        return "engaged"
+    return "quiet"
+
+
 def _build_daily_history_block(history):
     lines = [
         "## Daily History (Automated Ledger)",
@@ -455,19 +473,39 @@ def _build_daily_history_block(history):
         "> Maintained automatically by the daily steward from the GitHub Traffic API.",
         "> One row per day since launch. Rows never expire — unlike GitHub's own",
         "> 14-day traffic window, this ledger preserves the full history for review.",
+        "> **Signal** column: `extraction` = clones with zero views (automated/farming",
+        "> signature), `engaged` = views present, `quiet` = no traffic.",
         "",
         HISTORY_BEGIN,
         "",
-        "| Date | Views | Uniq. Visitors | Clones | Uniq. Cloners |",
-        "|---|---|---|---|---|",
+        "| Date | Views | Uniq. Visitors | Clones | Uniq. Cloners | Signal |",
+        "|---|---|---|---|---|---|",
     ]
+    extraction_clones = 0
+    total_clones = 0
+    extraction_days = 0
     for day in sorted(history):
         d = history[day]
+        signal = _classify_day(d)
+        clones = d.get("clones") or 0
+        total_clones += clones
+        if signal == "extraction":
+            extraction_clones += clones
+            extraction_days += 1
         lines.append(
             f"| {day} | {d.get('views', 0)} | {d.get('views_uniques', 0)} "
-            f"| {d.get('clones', 0)} | {d.get('clones_uniques', 0)} |"
+            f"| {clones} | {d.get('clones_uniques', 0)} | {signal} |"
         )
     lines.append("")
+    if total_clones:
+        share = round(100.0 * extraction_clones / total_clones)
+        lines.append(
+            f"**Extraction share (lifetime):** {extraction_clones} of {total_clones} clones "
+            f"({share}%) occurred on view-less days across {extraction_days} extraction days. "
+            f"High extraction share indicates automated mirroring/farming rather than human adoption; "
+            f"treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal."
+        )
+        lines.append("")
     lines.append(HISTORY_END)
     return "\n".join(lines)
 

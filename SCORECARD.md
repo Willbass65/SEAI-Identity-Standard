@@ -150,25 +150,35 @@
 > One row per day since launch. Rows never expire — unlike GitHub's own
 > 14-day traffic window, this ledger preserves the full history for review.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+> **Signal** column: `extraction` = clones with zero views (automated/farming
+> signature), `engaged` = views present, `quiet` = no traffic.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
-| Date | Views | Uniq. Visitors | Clones | Uniq. Cloners |
-|---|---|---|---|---|
-| 2026-08-07 | 45 | 38 | 33 | 20 |
-| 2026-08-08 | 21 | 4 | 20 | 12 |
-| 2026-08-09 | 64 | 2 | 54 | 28 |
-| 2026-08-10 | 7 | 3 | 9 | 6 |
-| 2026-08-11 | 10 | 1 | 5 | 5 |
-| 2026-08-12 | 1 | 1 | 2 | 2 |
-| 2026-08-13 | 5 | 1 | 10 | 7 |
-| 2026-08-14 | 1 | 1 | 3 | 3 |
-| 2026-08-15 | 0 | 0 | 2 | 2 |
-| 2026-08-16 | 0 | 0 | 6 | 5 |
-| 2026-08-17 | 1 | 1 | 3 | 3 |
-| 2026-08-18 | 0 | 0 | 2 | 2 |
-| 2026-08-19 | 0 | 0 | 2 | 2 |
-| 2026-08-20 | 0 | 0 | 10 | 6 |
-| 2026-08-21 | 0 | 0 | 16 | 11 |
+| Date | Views | Uniq. Visitors | Clones | Uniq. Cloners | Signal |
+|---|---|---|---|---|---|
+| 2026-08-07 | 45 | 38 | 33 | 20 | engaged |
+| 2026-08-08 | 21 | 4 | 20 | 12 | engaged |
+| 2026-08-09 | 64 | 2 | 54 | 28 | engaged |
+| 2026-08-10 | 7 | 3 | 9 | 6 | engaged |
+| 2026-08-11 | 10 | 1 | 5 | 5 | engaged |
+| 2026-08-12 | 1 | 1 | 2 | 2 | engaged |
+| 2026-08-13 | 5 | 1 | 10 | 7 | engaged |
+| 2026-08-14 | 1 | 1 | 3 | 3 | engaged |
+| 2026-08-15 | 0 | 0 | 2 | 2 | extraction |
+| 2026-08-16 | 0 | 0 | 6 | 5 | extraction |
+| 2026-08-17 | 1 | 1 | 3 | 3 | engaged |
+| 2026-08-18 | 0 | 0 | 2 | 2 | extraction |
+| 2026-08-19 | 0 | 0 | 2 | 2 | extraction |
+| 2026-08-20 | 0 | 0 | 10 | 6 | extraction |
+| 2026-08-21 | 0 | 0 | 16 | 11 | extraction |
+
+**Extraction share (lifetime):** 38 of 177 clones (21%) occurred on view-less days across 6 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
 
 <!-- END daily-history -->
 
@@ -257,4 +267,4 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 | Open PRs | 0 |
 | Discussions | 6 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-08-22 14:20 |
+| Last refreshed (UTC) | 2026-08-22 15:49 |
