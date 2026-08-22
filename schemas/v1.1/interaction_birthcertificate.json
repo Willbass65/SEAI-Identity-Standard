@@ -167,6 +167,35 @@
               "contentEncoding": "base64"
             }
           }
+        },
+        "handoff_attestation": {
+          "type": "object",
+          "description": "One-time attestation required at every hardware-boundary crossing (Round 3 Q4 ruling). Signed by the parent hardware, or countersigned by the S-CA for privileged delegation. The attestation's hash is bound into parent_interaction_hash; the child hardware signs all subsequent actions. OPTIONAL for same-principal sessions; REQUIRED when this tag's agent_identity.hardware_id differs from its parent tag's.",
+          "required": ["parent_hardware_id", "child_hardware_id", "signature"],
+          "properties": {
+            "parent_hardware_id": {
+              "type": "string",
+              "description": "hardware_id of the parent principal that authorized this crossing."
+            },
+            "child_hardware_id": {
+              "type": "string",
+              "description": "hardware_id of the child principal receiving execution."
+            },
+            "signature": {
+              "type": "string",
+              "contentEncoding": "base64",
+              "description": "Parent hardware's signature over the attestation payload (JCS-canonical, value omitted)."
+            },
+            "s_ca_countersignature": {
+              "type": "string",
+              "contentEncoding": "base64",
+              "description": "Optional S-CA countersignature. REQUIRED (normative SHOULD) for privileged delegation handoffs."
+            },
+            "privileged": {
+              "type": "boolean",
+              "description": "True when this handoff delegates privileged authority. When true, s_ca_countersignature MUST be present."
+            }
+          }
         }
       }
     },

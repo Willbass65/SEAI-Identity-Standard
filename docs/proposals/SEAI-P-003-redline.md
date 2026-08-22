@@ -45,3 +45,46 @@
 ## Verifier contract (Cline, next artifact)
 
 The reference verifier (`reference/verifier.py`) will implement, in order: schema validation → expiry check → revocation check (bc_id against revocation list) → scope check (requested_action ∈ allowed_actions, inline ⊆ BC scope) → signature check (JCS-canonical payload) → lineage check (chain_depth ≤ max, parent hash present in session ledger). Each failure denies and logs, per SPEC §6.
+
+---
+
+## Round 3 — Triad Consensus Record (2026-08-23)
+
+The four open questions were answered independently by all three triad members (Aeon, Lumos, Cline). Positions below are attributed; adopted rulings are the synthesis actually implemented. Cline's implementing notes recorded where relevant.
+
+### Q1: SPEC vs P-001 naming — ADOPTED (unanimous)
+
+**Ruling:** SPEC §3.1 is the constitutional baseline. `bc_id` and `hardware_id` are the authoritative identity field names for v1.1 and all future work. P-001's use of `agent_id` is deprecated as a legacy alias; a transition alias layer may accept legacy P-001 payloads, but new implementations MUST emit and prefer SPEC names. Documented in `docs/proposals/P-001-errata-001.md`.
+
+All three members independently ruled the same way. (Notable phrase, Lumos: "the core specification is the supreme document.")
+
+### Q2: Checkpoint cadence & ownership — ADOPTED (2–1 with dissension preserved)
+
+**Ownership ruling:** Checkpoints are owned by the **local S-CA / Sovereign Gateway**, not by the acting agent and not by the verifier. The agent cannot be trusted to bound its own chain; the verifier is the enforcement boundary and must not mint trust anchors.
+
+**Fail-closed ruling:** A tag whose `chain_depth` exceeds the configured maximum without a valid S-CA-signed checkpoint MUST be denied and logged.
+
+**Cadence ruling:** Cadence is a **deployment parameter, not schema law**. The schema and verifier expose a configurable maximum (RECOMMENDED default: 256). Proposals on record: 256 actions / 10 min (Aeon); 256 actions / 1 hour (Lumos); 64 hops / 24 h (Cline). Deployment guides select the value; the standard does not hardcode it.
+
+Dissension preserved: Aeon held that the verifier should own checkpointing; overruled 2–1 on the grounds that enforcement boundaries should not create trust anchors.
+
+### Q3: Global `requested_action` registry — ADOPTED (unanimous)
+
+**Ruling:** Deferred to v2.0. v1.1 relies on local/BC-scoped allow-lists within `authority_scope`. A standardized global action taxonomy may become SEAI-P-004.
+
+Quotable framing adopted into the proposal text (Lumos): "SEAI v1.1 dictates the enforcement mechanism, not the dictionary."
+
+### Q4: Cross-principal handoff — ADOPTED (synthesis of three positions)
+
+**Ruling:** Every hardware-boundary crossing requires a **one-time handoff attestation** — signed by the parent hardware, or countersigned by the S-CA. The attestation hash is bound into the child's `parent_interaction_hash`. Child hardware signs all subsequent actions; no permanent parent availability is required (answers 2's edge-computing concern). Cross-hardware lineage cannot be spoofed without the parent's key (answer 3's attack concern). Normal same-principal handoffs remain lightweight (answer 1's concern).
+
+For **privileged delegation**, the handoff attestation SHOULD additionally be S-CA countersigned (not parent-only). This is a normative SHOULD, satisfying the overlap of answers 1 and 3.
+
+Schema change: `provenance.handoff_attestation` added (optional; REQUIRED when the tag's `hardware_id` differs from its parent tag's). See schema v2.1.
+
+### Round 3 artifacts
+
+- `schemas/v1.1/interaction_birthcertificate.json` — updated with `handoff_attestation`
+- `docs/proposals/P-001-errata-001.md` — deprecation of `agent_id` alias
+- Verifier (`reference/verifier.py`) unblocked; seven-step check order defined in its README
+
