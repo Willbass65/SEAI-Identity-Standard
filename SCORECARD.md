@@ -158,6 +158,14 @@
 > **Signal** column: `extraction` = clones with zero views (automated/farming
 > signature), `engaged` = views present, `quiet` = no traffic.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+> **Signal** column: `extraction` = clones with zero views (automated/farming
+> signature), `engaged` = views present, `quiet` = no traffic.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
 | Date | Views | Uniq. Visitors | Clones | Uniq. Cloners | Signal |
