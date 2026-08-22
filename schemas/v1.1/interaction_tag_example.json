@@ -1,0 +1,37 @@
+{
+  "seai_version": "1.1",
+  "proposal_ref": "SEAI-P-003",
+  "interaction": {
+    "session_id": "sess_8f92a1b3c7d04e15",
+    "action_sequence": 14,
+    "timestamp_utc": "2026-08-22T15:30:00Z",
+    "nonce": "c2VhLW5vbmNlLTEyOC1iaXRzLXJhbmRvbQ==",
+    "expires_at": "2026-08-22T15:34:00Z"
+  },
+  "agent_identity": {
+    "bc_id": "seai-bc-00000231",
+    "hardware_id": "tpm2-inwin-88f2a",
+    "model_digest": "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90",
+    "model_name": "llama-3.2-3b-instruct"
+  },
+  "authority": {
+    "level": 2,
+    "requested_action": "write_remote_log",
+    "scope_source": {
+      "inline": {
+        "allowed_actions": ["read_local_files", "write_remote_log"],
+        "forbidden_actions": ["open_network_sockets", "modify_system_binaries"]
+      }
+    }
+  },
+  "provenance": {
+    "parent_interaction_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "chain_depth": 13
+  },
+  "signature": {
+    "algorithm": "ECDSA-P256-SHA256",
+    "canonicalization": "RFC8785-JCS",
+    "value": "MEUCIQC7example-base64-signature-over-jcs-canonical-tag-without-value-field",
+    "profile": "dev-test"
+  }
+}
