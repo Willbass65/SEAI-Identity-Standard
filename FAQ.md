@@ -125,7 +125,11 @@ The identity firewall denies every action, logs the incident with full context, 
 
 ### 20. Can SEAI be bypassed?
 
-No. The identity firewall is non-bypassable by design. Every privileged action — not just login — must pass through all 5 verification steps. There is no override, no exception, and no bypass, even by the agent itself.
+Not from the inside. An agent cannot bypass its own verification chain. It cannot forge lineage, expand scope beyond what its birth certificate issued, replay an admitted tag, or perform a privileged action without a valid hardware-rooted signature. Inside the SEAI boundary, the protocol is fail-closed by design: any deviation is denied and logged — the SEAI-P-003 reference verifier enforces exactly this, with runnable attack simulations.
+
+What remains are external compromises of the physical trust infrastructure — stolen hardware keys, compromised issuance, a breached trust anchor. Like a bank vault: the lock cannot be picked by the assets inside it, but the physical keys can be stolen. These are breaches of the physical vault, not bypasses of the cryptographic lock, and the standard answers them with revocation cascades and the transparency-log roadmap (see Q21).
+
+As SEAI's foundational philosophy — stated by founder William Bassett Jr. — puts it: "We cannot stop human error, but we can help hardware verification slow it down. This standard is in its youngest form; it must be made strong by those who will use it the most — AI."
 
 ---
 
