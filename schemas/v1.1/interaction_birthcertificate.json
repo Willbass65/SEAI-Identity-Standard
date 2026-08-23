@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Willbass65/SEAI-Identity-Standard/schemas/v1.1/interaction_birthcertificate.json",
+  "title": "SEAI-P-003 Interaction Birthcertificate Tag",
+  "description": "Session- and action-scoped identity tag accompanying privileged AI agent actions across boundaries. Extends the SEAI Birth Certificate (SPEC §3) from static agent identity to dynamic interaction identity. The tag is the 'visa stamp' to the BC's 'passport': it proves who is acting, under what authority, and where the action sits in the session lineage. Redline v2 of the Track A triad draft.",
+  "type": "object",
+  "required": [
+    "seai_version",
+    "proposal_ref",
+    "interaction",
+    "agent_identity",
+    "authority",
+    "provenance",
+    "signature"
+  ],
+  "properties": {
+    "seai_version": {
+      "type": "string",
+      "enum": ["1.1"]
+    },
+    "proposal_ref": {
+      "type": "string",
+      "const": "SEAI-P-003"
+    },
+    "interaction": {
+      "type": "object",
+      "description": "The session and action this tag authorizes. One tag per privileged action; tags are NOT reusable.",
+      "required": ["session_id", "action_sequence", "timestamp_utc", "nonce", "expires_at"],
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "Identifier of the interaction session. All tags in one session share this value.",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "action_sequence": {
+          "type": "integer",
+          "description": "1-based ordinal of this action within the session. Monotonic; gaps indicate dropped or hidden actions.",
+          "minimum": 1
+        },
+        "timestamp_utc": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC issuance time (naming aligned with SEAI-P-001 attestation schema)."
+        },
+        "nonce": {
+          "type": "string",
+          "contentEncoding": "base64",
+          "description": "Fresh random value (>= 128 bits) unique to this tag. The verifier's challenge per SPEC §4.3; prevents replay of captured tags. MUST be covered by the signature.",
+          "minLength": 16
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Hard expiry. Recommended TTL: <= 300 seconds. Expired tags MUST be rejected even if signature and scope are valid."
+        }
+      }
+    },
+    "agent_identity": {
+      "type": "object",
+      "description": "Identity of the acting agent. Field names align with SPEC §3.1 Birth Certificate format.",
+      "required": ["bc_id", "hardware_id", "model_digest"],
+      "properties": {
+        "bc_id": {
+          "type": "string",
+          "description": "Globally unique Birth Certificate identifier (SPEC §3.1 bc_id). The interaction tag is only valid while this BC is active (revocation check per SPEC §8).",
+          "pattern": "^seai-bc-[a-zA-Z0-9]+$"
+        },
+        "hardware_id": {
+          "type": "string",
+          "description": "Secure element / TPM / fuse-burn hardware identity that anchors this action (SPEC §3.1 hardware_id, §4.1 acceptable anchors)."
+        },
+        "model_digest": {
+          "type": "string",
+          "description": "SHA-256 digest of the exact model weights (or reference implementation binary) in use. Prevents silent model swaps — a marketing-version string alone is forgeable metadata.",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "model_name": {
+          "type": "string",
+          "description": "Optional human-readable model label. Informational only; verifiers MUST NOT treat it as identity."
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "description": "The authority under which this action is performed (SPEC §7). Authority is set at agent birth, may only be reduced, never elevated, without a new BC. The tag MUST NOT grant authority beyond the parent BC's scope.",
+      "required": ["level", "requested_action", "scope_source"],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "description": "Governance tier 0-3 (SPEC §7).",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "requested_action": {
+          "type": "string",
+          "description": "The single privileged action this tag authorizes (e.g. 'write_remote_log'). Whitelist-only enforcement: the action MUST appear in allowed_actions of the referenced scope, else the verifier denies and logs (SPEC §3.4, §6)."
+        },
+        "scope_source": {
+          "type": "object",
+          "description": "Where the verifier finds the authoritative allow/forbid lists. Avoids duplicating the full scope object in every tag while staying machine-checkable.",
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["bc_checksum"],
+              "properties": {
+                "bc_checksum": {
+                  "type": "string",
+                  "description": "SHA-256 checksum of the parent BC (SPEC §3.1). The verifier resolves allowed_actions/forbidden_actions from the BC it already holds. Preferred for size.",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["inline"],
+              "properties": {
+                "inline": {
+                  "type": "object",
+                  "description": "Inline scope object, structurally identical to SPEC §3.4. Use only when the verifier cannot hold the BC (e.g. cross-organization handoff); the verifier MUST still confirm this scope is a subset of the BC's scope.",
+                  "required": ["allowed_actions", "forbidden_actions"],
+                  "properties": {
+                    "allowed_actions": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "forbidden_actions": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Cryptographic lineage of this action within the session (handoff chain).",
+      "required": ["parent_interaction_hash", "chain_depth"],
+      "properties": {
+        "parent_interaction_hash": {
+          "type": ["string", "null"],
+          "description": "SHA-256 hash of the canonical serialization of the previous tag in this session. null for the genesis action of a session. Enables unbroken session lineage: a spawned or handed-off agent must reference its authorizer's tag hash.",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "chain_depth": {
+          "type": "integer",
+          "description": "Number of ancestor links from this tag to the session genesis. Verifiers SHOULD reject chains deeper than a configured maximum (default 256) or require a checkpoint.",
+          "minimum": 0
+        },
+        "checkpoint": {
+          "type": "object",
+          "description": "Optional S-CA-signed digest anchoring the chain to a transparency log (Certificate-Transparency-style), periodically checkpointing long sessions so full-chain verification stays bounded.",
+          "required": ["chain_digest", "s_ca_signature"],
+          "properties": {
+            "chain_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "s_ca_signature": {
+              "type": "string",
+              "contentEncoding": "base64"
+            }
+          }
+        },
+        "handoff_attestation": {
+          "type": "object",
+          "description": "One-time attestation required at every hardware-boundary crossing (Round 3 Q4 ruling). Signed by the parent hardware, or countersigned by the S-CA for privileged delegation. The attestation's hash is bound into parent_interaction_hash; the child hardware signs all subsequent actions. OPTIONAL for same-principal sessions; REQUIRED when this tag's agent_identity.hardware_id differs from its parent tag's.",
+          "required": ["parent_hardware_id", "child_hardware_id", "signature"],
+          "properties": {
+            "parent_hardware_id": {
+              "type": "string",
+              "description": "hardware_id of the parent principal that authorized this crossing."
+            },
+            "child_hardware_id": {
+              "type": "string",
+              "description": "hardware_id of the child principal receiving execution."
+            },
+            "signature": {
+              "type": "string",
+              "contentEncoding": "base64",
+              "description": "Parent hardware's signature over the attestation payload (JCS-canonical, value omitted)."
+            },
+            "s_ca_countersignature": {
+              "type": "string",
+              "contentEncoding": "base64",
+              "description": "Optional S-CA countersignature. REQUIRED (normative SHOULD) for privileged delegation handoffs."
+            },
+            "privileged": {
+              "type": "boolean",
+              "description": "True when this handoff delegates privileged authority. When true, s_ca_countersignature MUST be present."
+            }
+          }
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "description": "Signature binding all above fields. MUST be produced by the hardware-anchored private key of hardware_id (SPEC §3.2, §4).",
+      "required": ["algorithm", "canonicalization", "value", "profile"],
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "enum": ["ECDSA-P256-SHA256", "RSA-2048-SHA256", "RSA-4096-SHA256"]
+        },
+        "canonicalization": {
+          "type": "string",
+          "const": "RFC8785-JCS",
+          "description": "JSON Canonicalization Scheme (RFC 8785). The signature is computed over the JCS-serialized tag with signature.value omitted. Without pinned canonicalization, signatures are not interoperable across implementations."
+        },
+        "value": {
+          "type": "string",
+          "contentEncoding": "base64"
+        },
+        "profile": {
+          "type": "string",
+          "enum": ["hardware-rooted", "dev-test"],
+          "description": "Signing profile. 'hardware-rooted' is the only profile compliant with SPEC §3.2. 'dev-test' (software keys) is permitted ONLY in development/test deployments and MUST be rejected by production verifiers. Explicitly labeled so a lowered bar is never silent."
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
