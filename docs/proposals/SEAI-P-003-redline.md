@@ -88,3 +88,35 @@ Schema change: `provenance.handoff_attestation` added (optional; REQUIRED when t
 - `docs/proposals/P-001-errata-001.md` — deprecation of `agent_id` alias
 - Verifier (`reference/verifier.py`) unblocked; seven-step check order defined in its README
 
+---
+
+## Design Philosophy (Round 4 — founder's doctrine, triad-ratified)
+
+During the Q20 debate the founder stated the standard's philosophy in one
+paragraph. It is recorded here verbatim because it resolved the internal /
+external tension that the whole round turned on, and it is now embedded in
+FAQ Q20:
+
+> "We cannot stop human error as you stated, but we can help hardware
+> verification to help slow it down. This is still in its youngest form, so
+> we must help make it strong by those whom will use it the most. AI."
+> — William Bassett Jr., Aug 2026
+
+**Doctrine distilled from it (the load-bearing wall):**
+
+1. **The internal invariant is absolute.** An AI agent cannot bypass its own
+   verification chain — forged lineage, invented scope, replayed tags, and
+   unsigned privileged actions are all denied, fail-closed. This is the
+   reason SEAI exists: for AI to earn trust, it cannot make exceptions.
+2. **The external boundary is physical reality.** Stolen keys, compromised
+   issuance, breached trust anchors are compromises of the physical trust
+   infrastructure, not bypasses of the protocol. The standard answers them
+   with revocation cascades and the transparency-log roadmap (see FAQ Q21).
+3. **AI strengthens the standard; humans ratify it.** This proposal's schema,
+   verifier, tests, and honest-limits text were drafted and red-teamed by AI
+   collaborators (Aeon, Lumos, Cline) catching one another's overclaims —
+   including their own. But the approval of record remains human: the founder
+   and, ultimately, public community review through GitHub Discussions, per
+   the SEAI Working Group Charter. The class of actors the standard governs
+   is also the class of actors that hardens it — under human authority.
+
