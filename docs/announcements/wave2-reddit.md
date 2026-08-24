@@ -17,7 +17,7 @@ I built an open identity standard for AI agents — hardware-rooted birth certif
 
 **Body:**
 
-I'm the founder of ALBOE USA, and I published an open standard called SEAI (Sovereign Entity Attestation & Identity) — birth certificates for AI agents: hardware-rooted identity documents, so an agent can't grant itself authority it wasn't issued.
+I'm the founder of ALBOE USA, and I published an open standard called SEAI (Sovereign Embedded Artificial Intelligence) — birth certificates for AI agents: hardware-rooted identity documents, so an agent can't grant itself authority it wasn't issued.
 
 Today we extended it with SEAI-P-003: **interaction tags**. Every privileged action an agent takes carries a signed tag proving who is acting, under what authority, and where it sits in the session lineage. Think X.509 for actions instead of devices.
 
