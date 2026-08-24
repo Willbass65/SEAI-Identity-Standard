@@ -7,7 +7,9 @@
 
 ## Title
 
-Show HN: SEAI-P-003 — Identity tags for AI agent actions, with a fail-closed verifier
+Show HN: SEAI-P-003 — Identity tags for AI agent actions (fail-closed verifier)
+
+*(79 characters — fits HN's 80-char title cap.)*
 
 ## URL
 
