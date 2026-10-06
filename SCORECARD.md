@@ -10,15 +10,15 @@
 | Metric | Value |
 |---|---|
 | ⭐ Stars | 1 |
-| 👁 Watchers | 0 |
+| 👁 Watchers | 1 |
 | 🍴 Forks | 0 |
 | 📋 Open Issues | 1 |
 | 💬 Discussions | 7 |
-| 👀 Unique Visitors (14-day window) | 3 |
-| 📄 Page Views (lifetime) | 186 |
-| 📄 Adjusted Page Views (14-day window) | 3 |
-| 📥 Unique Cloners (14-day window) | 91 |
-| 📥 Total Clones (lifetime) | 595 |
+| 👀 Unique Visitors (14-day window) | 4 |
+| 📄 Page Views (lifetime) | 188 |
+| 📄 Adjusted Page Views (14-day window) | 5 |
+| 📥 Unique Cloners (14-day window) | 96 |
+| 📥 Total Clones (lifetime) | 613 |
 
 > **Self-traffic accounting:** GitHub's traffic API cannot exclude the owner. The
 > adjusted figure subtracts views on provably admin-only pages (`/pulse`,
@@ -518,6 +518,14 @@
 > **Signal** column: `extraction` = clones with zero views (automated/farming
 > signature), `engaged` = views present, `quiet` = no traffic.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+> **Signal** column: `extraction` = clones with zero views (automated/farming
+> signature), `engaged` = views present, `quiet` = no traffic.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
 | Date | Views | Uniq. Visitors | Clones | Uniq. Cloners | Signal |
@@ -581,8 +589,9 @@
 | 2026-10-02 | 0 | 0 | 4 | 2 | extraction |
 | 2026-10-03 | 0 | 0 | 15 | 8 | extraction |
 | 2026-10-04 | 0 | 0 | 7 | 5 | extraction |
+| 2026-10-05 | 2 | 2 | 18 | 12 | engaged |
 
-**Extraction share (lifetime):** 338 of 595 clones (57%) occurred on view-less days across 38 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
+**Extraction share (lifetime):** 338 of 613 clones (55%) occurred on view-less days across 38 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
 
 <!-- END daily-history -->
 
@@ -660,15 +669,15 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
-### Governance Scorecard | 2026-10-05
+### Governance Scorecard | 2026-10-06
 
 | Item | Status |
 |---|---|
 | Stars | 1 |
 | Forks | 0 |
-| Watchers | 0 |
+| Watchers | 1 |
 | Open issues | 1 |
 | Open PRs | 0 |
 | Discussions | 7 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-10-05 21:22 |
+| Last refreshed (UTC) | 2026-10-06 19:18 |
