@@ -14,11 +14,11 @@
 | 🍴 Forks | 0 |
 | 📋 Open Issues | 1 |
 | 💬 Discussions | 7 |
-| 👀 Unique Visitors (14-day window) | 2 |
-| 📄 Page Views (lifetime) | 192 |
-| 📄 Adjusted Page Views (14-day window) | 2 |
-| 📥 Unique Cloners (14-day window) | 72 |
-| 📥 Total Clones (lifetime) | 886 |
+| 👀 Unique Visitors (14-day window) | 3 |
+| 📄 Page Views (lifetime) | 194 |
+| 📄 Adjusted Page Views (14-day window) | 3 |
+| 📥 Unique Cloners (14-day window) | 79 |
+| 📥 Total Clones (lifetime) | 912 |
 
 > **Self-traffic accounting:** GitHub's traffic API cannot exclude the owner. The
 > adjusted figure subtracts views on provably admin-only pages (`/pulse`,
@@ -702,6 +702,14 @@
 > **Signal** column: `extraction` = clones with zero views (automated/farming
 > signature), `engaged` = views present, `quiet` = no traffic.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+> **Signal** column: `extraction` = clones with zero views (automated/farming
+> signature), `engaged` = views present, `quiet` = no traffic.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
 | Date | Views | Uniq. Visitors | Clones | Uniq. Cloners | Signal |
@@ -788,8 +796,9 @@
 | 2026-10-25 | 0 | 0 | 25 | 15 | extraction |
 | 2026-10-26 | 0 | 0 | 8 | 6 | extraction |
 | 2026-10-27 | 0 | 0 | 4 | 2 | extraction |
+| 2026-10-28 | 2 | 2 | 26 | 15 | engaged |
 
-**Extraction share (lifetime):** 533 of 886 clones (60%) occurred on view-less days across 56 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
+**Extraction share (lifetime):** 533 of 912 clones (58%) occurred on view-less days across 56 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
 
 <!-- END daily-history -->
 
@@ -867,7 +876,7 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
-### Governance Scorecard | 2026-10-28
+### Governance Scorecard | 2026-10-29
 
 | Item | Status |
 |---|---|
@@ -878,4 +887,4 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 | Open PRs | 0 |
 | Discussions | 7 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-10-28 19:20 |
+| Last refreshed (UTC) | 2026-10-29 19:25 |
