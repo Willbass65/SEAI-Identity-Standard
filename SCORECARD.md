@@ -17,8 +17,8 @@
 | 👀 Unique Visitors (14-day window) | 0 |
 | 📄 Page Views (lifetime) | 197 |
 | 📄 Adjusted Page Views (14-day window) | 0 |
-| 📥 Unique Cloners (14-day window) | 51 |
-| 📥 Total Clones (lifetime) | 1135 |
+| 📥 Unique Cloners (14-day window) | 54 |
+| 📥 Total Clones (lifetime) | 1144 |
 
 > **Self-traffic accounting:** GitHub's traffic API cannot exclude the owner. The
 > adjusted figure subtracts views on provably admin-only pages (`/pulse`,
@@ -934,6 +934,14 @@
 > **Signal** column: `extraction` = clones with zero views (automated/farming
 > signature), `engaged` = views present, `quiet` = no traffic.
 
+## Daily History (Automated Ledger)
+
+> Maintained automatically by the daily steward from the GitHub Traffic API.
+> One row per day since launch. Rows never expire — unlike GitHub's own
+> 14-day traffic window, this ledger preserves the full history for review.
+> **Signal** column: `extraction` = clones with zero views (automated/farming
+> signature), `engaged` = views present, `quiet` = no traffic.
+
 <!-- BEGIN daily-history (auto-maintained by the steward; do not edit) -->
 
 | Date | Views | Uniq. Visitors | Clones | Uniq. Cloners | Signal |
@@ -1049,8 +1057,9 @@
 | 2026-11-23 | 0 | 0 | 7 | 4 | extraction |
 | 2026-11-24 | 0 | 0 | 3 | 2 | extraction |
 | 2026-11-25 | 0 | 0 | 12 | 10 | extraction |
+| 2026-11-26 | 0 | 0 | 9 | 7 | extraction |
 
-**Extraction share (lifetime):** 724 of 1135 clones (64%) occurred on view-less days across 81 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
+**Extraction share (lifetime):** 733 of 1144 clones (64%) occurred on view-less days across 82 extraction days. High extraction share indicates automated mirroring/farming rather than human adoption; treat stars, forks, issues, and discussion participants — not raw clones — as adoption signal.
 
 <!-- END daily-history -->
 
@@ -1128,7 +1137,7 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 *Scorecard maintained by Cline for ALBOE USA LLC.*
 *Data sourced from GitHub REST API and GraphQL API.*
 
-### Governance Scorecard | 2026-11-26
+### Governance Scorecard | 2026-11-27
 
 | Item | Status |
 |---|---|
@@ -1139,4 +1148,4 @@ window with clean attribution against the Aug 15 floor (0 views / 2 clones).
 | Open PRs | 0 |
 | Discussions | 7 |
 | Security advisories | 0 |
-| Last refreshed (UTC) | 2026-11-26 22:49 |
+| Last refreshed (UTC) | 2026-11-27 22:30 |
